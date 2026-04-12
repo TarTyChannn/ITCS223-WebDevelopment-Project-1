@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Search Results — Long Gone</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--blood:#8b0000;--blood-light:#b30000;--dark:#111010;--font-display:'Cinzel',serif;--font-body:'Crimson Text',serif;}
+body{background:var(--dark);min-height:100vh;font-family:var(--font-body);display:flex;flex-direction:column;}
+nav{background:var(--dark);display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;border-bottom:1px solid #2a2a2a;}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{color:#ccc;text-decoration:none;font-family:var(--font-display);font-size:13px;letter-spacing:1px;transition:color .2s;}
+.nav-links a:hover{color:#fff;}
+.nav-brand{font-family:var(--font-display);font-size:22px;letter-spacing:4px;color:#fff;text-decoration:none;position:absolute;left:50%;transform:translateX(-50%);}
+.admin-btn{background:var(--blood);color:#fff;border:none;padding:7px 16px;border-radius:3px;font-family:var(--font-display);font-size:12px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;gap:6px;}
+.admin-btn:hover{background:var(--blood-light);}
+.page-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.results-panel{background:#e5e5e5;border-radius:14px;padding:36px;width:100%;max-width:540px;}
+.results-panel h2{font-family:var(--font-display);font-size:22px;color:#111;margin-bottom:6px;}
+.subtitle{font-size:14px;color:#888;margin-bottom:28px;font-style:italic;}
+.field{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.field label{font-size:14px;color:#444;min-width:110px;font-family:var(--font-display);letter-spacing:.5px;}
+.fval{flex:1;background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px 14px;font-size:14px;color:#333;}
+.badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:12px;font-family:var(--font-display);}
+.badge-rent{background:#dbeafe;color:#1d4ed8;} .badge-buy{background:#dcfce7;color:#15803d;}
+.no-match{text-align:center;padding:40px 0;color:#888;font-size:16px;font-style:italic;}
+.actions{display:flex;gap:11px;margin-top:8px;flex-wrap:wrap;}
+.btn-return{background:#888;color:#fff;border:none;border-radius:6px;padding:11px 22px;font-family:var(--font-display);font-size:12px;letter-spacing:1px;cursor:pointer;}
+.btn-view{background:#2563eb;color:#fff;border:none;border-radius:6px;padding:11px 22px;font-family:var(--font-display);font-size:12px;letter-spacing:1px;cursor:pointer;}
+.btn-edit{background:#f59e0b;color:#fff;border:none;border-radius:6px;padding:11px 22px;font-family:var(--font-display);font-size:12px;letter-spacing:1px;cursor:pointer;display:none;}
+.all-link{text-align:center;margin-top:20px;}
+.all-link a{color:var(--blood-light);font-family:var(--font-display);font-size:12px;letter-spacing:1px;text-decoration:none;}
+.all-link a:hover{text-decoration:underline;}
+footer{background:var(--dark);border-top:1px solid #2a2a2a;text-align:center;padding:20px;font-family:var(--font-display);font-size:11px;letter-spacing:2px;color:#555;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-links"><a href="buy.html">Buy</a><a href="rent.html">Rent</a><a href="team.html">Our Team</a></div>
+  <a class="nav-brand" href="homepage.html">Long Gone</a>
+  <div><button class="admin-btn" id="adminBtn">&#128274; Admin</button></div>
+</nav>
+<div class="page-wrap">
+  <div class="results-panel">
+    <h2>Search Result</h2>
+    <p class="subtitle" id="subTitle"></p>
+    <div id="resultContent"></div>
+  </div>
+</div>
+<footer>&copy; 2024 Long Gone &mdash; All Spirits Reserved</footer>
+<script>
+function isAdmin(){if(localStorage.getItem('lgAdmin')==='true'){sessionStorage.setItem('lgAdmin','true');sessionStorage.setItem('lgAdminUser',localStorage.getItem('lgAdminUser')||'Admin');}return sessionStorage.getItem('lgAdmin')==='true';}
+function getAdminUser(){return sessionStorage.getItem('lgAdminUser')||localStorage.getItem('lgAdminUser')||'Admin';}
+function doLogout(){sessionStorage.removeItem('lgAdmin');localStorage.removeItem('lgAdmin');sessionStorage.removeItem('lgAdminUser');localStorage.removeItem('lgAdminUser');location.href='admin-login.html';}
+// Update nav admin button
+(function(){var b=document.getElementById('adminBtn');if(isAdmin()){b.textContent='Dashboard';b.onclick=function(){location.href='dashboard.html'};}else{b.onclick=function(){location.href='admin-login.html';};}})();
+
+var HOUSES=[
+  {id:67,name:"Haunted House in the Middle of Salaya",area:"Salaya, Nakhon Pathom, 73170",price:"500,000",type:"rent",rating:4,updated:"16/2/2026"},
+  {id:68,name:"Old Victorian Manor",area:"Nongkhok, Bangkok, 10530",price:"800,000",type:"buy",rating:5,updated:"10/3/2026"},
+  {id:69,name:"The Whisper House",area:"Mueang, Chiang Mai, 50000",price:"300,000",type:"rent",rating:3,updated:"5/4/2026"},
+  {id:70,name:"The Crow Estate",area:"Nongkhok, Bangkok, 10530",price:"650,000",type:"buy",rating:4,updated:"2/4/2026"},
+  {id:71,name:"The Mist Manor",area:"Mueang, Chiang Rai, 57000",price:"420,000",type:"rent",rating:5,updated:"1/4/2026"},
+  {id:72,name:"Shadowfall Cottage",area:"Kathu, Phuket, 83120",price:"350,000",type:"rent",rating:4,updated:"28/3/2026"},
+  {id:73,name:"The Hollow Keep",area:"Phra Nakhon Si Ayutthaya, 13000",price:"750,000",type:"buy",rating:5,updated:"15/3/2026"},
+  {id:74,name:"Widow's Peak House",area:"Doi Saket, Chiang Mai, 50220",price:"280,000",type:"rent",rating:3,updated:"10/3/2026"},
+];
+var sp=new URLSearchParams(location.search);
+var intent=sp.get('intent')||'';
+var loc=sp.get('location')||'';
+var minRating=parseInt(sp.get('rating'))||0;
+var parts=[];
+if(intent) parts.push(intent==='buy'?'For Sale':'For Rent');
+if(loc) parts.push('"'+loc+'"');
+if(minRating) parts.push(minRating+'+ skulls');
+document.getElementById('subTitle').textContent=parts.length?'Results for: '+parts.join(', '):'Showing all listings';
+var results=HOUSES.filter(function(h){
+  var locOk=loc?h.area.toLowerCase().includes(loc.toLowerCase())||h.name.toLowerCase().includes(loc.toLowerCase()):true;
+  var typeOk=intent?h.type===intent:true;
+  return locOk&&typeOk&&h.rating>=minRating;
+});
+var content=document.getElementById('resultContent');
+if(!results.length){
+  content.innerHTML='<div class="no-match">No haunted houses found.<br><br><a href="homepage.html" style="color:#8b0000">&#8592; Back to Home</a></div>';
+}else{
+  var h=results[0];
+  var adminEditBtn=isAdmin()?'<button class="btn-edit" id="editBtn" style="display:inline-block" onclick="location.href=\'edit-house.html?id='+h.id+'\'">Edit</button>':'';
+  var moreText=results.length>1?'<div style="font-size:13px;color:#888;margin-bottom:8px;font-style:italic">+' +(results.length-1)+' more result'+(results.length-1>1?'s':'')+' — <a href="'+(h.type==='buy'?'buy':'rent')+'.html?location='+encodeURIComponent(loc)+'" style="color:#8b0000">View all</a></div>':'';
+  var allLink=results.length>1?'<div class="all-link"><a href="'+(h.type==='buy'?'buy':'rent')+'.html?location='+encodeURIComponent(loc)+'&rating='+minRating+'">View all '+results.length+' matches →</a></div>':'';
+  content.innerHTML=
+    '<div class="field"><label>House Name</label><div class="fval">'+h.name+'</div></div>'+
+    '<div class="field"><label>House ID</label><div class="fval">'+h.id+'</div></div>'+
+    '<div class="field"><label>Type</label><div class="fval"><span class="badge badge-'+h.type+'">'+(h.type==='buy'?'For Sale':'For Rent')+'</span></div></div>'+
+    '<div class="field"><label>Price</label><div class="fval">'+h.price+' THB</div></div>'+
+    '<div class="field"><label>Location</label><div class="fval">'+h.area+'</div></div>'+
+    '<div class="field"><label>Last Updated</label><div class="fval">'+h.updated+'</div></div>'+
+    moreText+
+    '<div class="actions"><button class="btn-return" onclick="history.back()">&#8592; Return</button><button class="btn-view" onclick="location.href=\'house-detail.html?id='+h.id+'\'">View</button>'+adminEditBtn+'</div>'+
+    allLink;
+}
+</script>
+</body>
+</html>

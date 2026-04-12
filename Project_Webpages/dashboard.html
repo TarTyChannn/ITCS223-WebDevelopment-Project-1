@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard — Long Gone Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--blood:#8b0000;--blood-light:#b30000;--dark:#111010;--font-display:'Cinzel',serif;--font-body:'Crimson Text',serif;}
+body{background:#f0f0f0;font-family:var(--font-body);display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:var(--dark);color:#fff;flex-shrink:0;min-height:100vh;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;}
+.sidebar-brand{font-family:var(--font-display);font-size:20px;letter-spacing:3px;color:#fff;padding:22px 24px;border-bottom:1px solid #2a2a2a;cursor:pointer;}
+.sidebar-nav{padding:16px 0;flex:1;}
+.sidebar-nav a{display:block;padding:11px 24px;color:#ccc;font-family:var(--font-display);font-size:13px;letter-spacing:1px;text-decoration:none;transition:background .15s;cursor:pointer;}
+.sidebar-nav a:hover,.sidebar-nav a.active{background:#2a2a2a;color:#fff;}
+.sidebar-nav a.active{border-left:3px solid var(--blood);}
+.sidebar-user{padding:18px 24px;border-top:1px solid #2a2a2a;display:flex;align-items:center;gap:12px;}
+.user-av{width:36px;height:36px;background:var(--blood);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-family:var(--font-display);}
+.user-info{font-size:13px;color:#ccc;}
+.user-info strong{display:block;color:#fff;font-size:14px;}
+.logout-btn{background:none;border:1px solid #444;color:#aaa;border-radius:4px;padding:4px 10px;font-family:var(--font-display);font-size:11px;cursor:pointer;margin-top:4px;transition:all .2s;}
+.logout-btn:hover{border-color:#fff;color:#fff;}
+
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:240px;right:0;height:56px;background:#fff;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;justify-content:space-between;padding:0 32px;z-index:10;}
+.topbar-title{font-family:var(--font-display);font-size:16px;color:#333;letter-spacing:2px;}
+.top-av{width:38px;height:38px;background:var(--dark);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;position:relative;cursor:pointer;}
+.notif{position:absolute;top:-4px;right:-4px;background:#3b82f6;color:#fff;font-size:10px;border-radius:10px;padding:1px 5px;font-family:var(--font-display);}
+
+/* MAIN */
+.main{margin-left:240px;padding:72px 32px 60px;flex:1;}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.page-header h1{font-family:var(--font-display);font-size:26px;color:#111;letter-spacing:2px;}
+.add-btn{background:var(--blood);color:#fff;border:none;padding:10px 22px;border-radius:6px;font-family:var(--font-display);font-size:13px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .2s;}
+.add-btn:hover{background:var(--blood-light);}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+.stat-card{background:#fff;border-radius:10px;padding:20px 24px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.stat-label{font-family:var(--font-display);font-size:11px;letter-spacing:1px;color:#888;margin-bottom:6px;}
+.stat-val{font-family:var(--font-display);font-size:28px;font-weight:600;color:#111;}
+.stat-sub{font-size:13px;color:#888;margin-top:2px;}
+
+/* SEARCH */
+.search-row{display:flex;gap:12px;margin-bottom:24px;}
+.search-input{flex:1;background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px 16px;font-family:var(--font-body);font-size:15px;color:#333;outline:none;}
+.search-btn{background:#333;color:#fff;border:none;border-radius:6px;padding:10px 20px;cursor:pointer;font-family:var(--font-display);font-size:13px;letter-spacing:1px;transition:background .2s;}
+.search-btn:hover{background:#111;}
+
+/* TABLE */
+.table-wrap{background:#fff;border-radius:10px;overflow:auto;box-shadow:0 2px 12px rgba(0,0,0,.08);}
+table{width:100%;border-collapse:collapse;min-width:700px;}
+thead tr{background:#f8f8f8;}
+th{text-align:left;padding:13px 16px;font-family:var(--font-display);font-size:11px;letter-spacing:1px;color:#666;font-weight:600;border-bottom:1px solid #eee;}
+td{padding:13px 16px;font-size:14px;color:#333;border-top:1px solid #f0f0f0;vertical-align:middle;}
+tr:hover td{background:#fafafa;}
+.house-thumb-sm{width:58px;height:42px;object-fit:cover;border-radius:5px;filter:brightness(.75) contrast(1.1);}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-family:var(--font-display);letter-spacing:.5px;}
+.badge-rent{background:#dbeafe;color:#1d4ed8;}
+.badge-buy{background:#dcfce7;color:#15803d;}
+.action-btns{display:flex;gap:7px;}
+.btn-view,.btn-edit,.btn-delete{border:none;border-radius:5px;padding:6px 13px;font-size:12px;font-family:var(--font-display);cursor:pointer;transition:opacity .2s;}
+.btn-view{background:#3b82f6;color:#fff;}
+.btn-edit{background:#f59e0b;color:#fff;}
+.btn-delete{background:#ef4444;color:#fff;}
+.btn-view:hover,.btn-edit:hover,.btn-delete:hover{opacity:.82;}
+
+/* MODALS */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;}
+.overlay.show{display:flex;}
+.modal{background:#e8e8e8;border-radius:12px;padding:36px;min-width:360px;max-width:480px;width:90%;animation:popIn .2s ease;}
+@keyframes popIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.modal h2{font-family:var(--font-display);font-size:20px;color:#111;margin-bottom:22px;}
+.mfield{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.mfield label{font-size:14px;color:#333;min-width:100px;}
+.mfield input,.mfield select{flex:1;background:#fff;border:1px solid #ddd;border-radius:6px;padding:10px 14px;font-size:14px;color:#333;outline:none;font-family:var(--font-body);}
+.mactions{display:flex;gap:12px;justify-content:center;margin-top:12px;}
+.btn-cancel{background:#888;color:#fff;border:none;border-radius:6px;padding:10px 24px;font-family:var(--font-display);font-size:13px;cursor:pointer;}
+.btn-confirm{background:#2563eb;color:#fff;border:none;border-radius:6px;padding:10px 24px;font-family:var(--font-display);font-size:13px;cursor:pointer;}
+.btn-del-confirm{background:#ef4444;color:#fff;border:none;border-radius:6px;padding:10px 24px;font-family:var(--font-display);font-size:13px;cursor:pointer;}
+.del-center{text-align:center;}
+.del-center p{color:#555;margin:8px 0 24px;font-size:15px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#2e9e5e;color:#fff;padding:14px 24px;border-radius:8px;font-family:var(--font-display);font-size:13px;letter-spacing:1px;z-index:999;animation:slideUp .3s ease;}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+</style>
+</head>
+<body>
+
+<!-- Auth guard runs immediately before page renders -->
+<script>
+function isAdmin(){if(localStorage.getItem('lgAdmin')==='true'){sessionStorage.setItem('lgAdmin','true');sessionStorage.setItem('lgAdminUser',localStorage.getItem('lgAdminUser')||'Admin');}return sessionStorage.getItem('lgAdmin')==='true';}
+function getAdminUser(){return sessionStorage.getItem('lgAdminUser')||localStorage.getItem('lgAdminUser')||'Admin';}
+function doLogout(){sessionStorage.removeItem('lgAdmin');localStorage.removeItem('lgAdmin');sessionStorage.removeItem('lgAdminUser');localStorage.removeItem('lgAdminUser');location.href='admin-login.html';}
+if(!isAdmin()){location.href='admin-login.html';}
+</script>
+
+<aside class="sidebar">
+  <div class="sidebar-brand" onclick="location.href='homepage.html'">Long Gone</div>
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="active">Dashboard</a>
+    <a href="dashboard.html">Product Management</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-av" id="userInitial">A</div>
+    <div class="user-info">
+      <strong id="userName">Admin</strong>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+</aside>
+
+<div class="topbar">
+  <span class="topbar-title">Product Management</span>
+  <div class="top-av" id="topAvatar">A<span class="notif" id="notifBadge">0</span></div>
+</div>
+
+<main class="main">
+  <div class="page-header">
+    <h1>Product Management</h1>
+    <button class="add-btn" id="addBtn">+ Add New House</button>
+  </div>
+
+  <div class="stats" id="statsRow"></div>
+
+  <div class="search-row">
+    <input class="search-input" type="text" id="searchInput" placeholder="Search by name, ID, or location..."/>
+    <button class="search-btn" id="searchBtn">Search</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th><th>House Name</th><th>ID</th><th>Type</th>
+          <th>Price (THB)</th><th>Location</th><th>Updated</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tBody"></tbody>
+    </table>
+  </div>
+</main>
+
+<!-- ADD MODAL -->
+<div class="overlay" id="addModal">
+  <div class="modal">
+    <h2>Add New House</h2>
+    <div class="mfield"><label>House Name</label><input type="text" id="newName" placeholder="e.g. The Haunted Manor"/></div>
+    <div class="mfield"><label>House ID</label><input type="text" id="newId" placeholder="Unique ID number"/></div>
+    <div class="mfield"><label>Location</label><input type="text" id="newLoc" placeholder="City, Province"/></div>
+    <div class="mfield"><label>Price (THB)</label><input type="number" id="newPrice" placeholder="e.g. 500000"/></div>
+    <div class="mfield"><label>Type</label>
+      <select id="newType">
+        <option value="rent">For Rent</option>
+        <option value="buy">For Sale</option>
+      </select>
+    </div>
+    <div class="mactions">
+      <button class="btn-cancel" id="cancelAdd">Cancel</button>
+      <button class="btn-confirm" id="confirmAdd">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="overlay" id="deleteModal">
+  <div class="modal">
+    <div class="del-center">
+      <h2>Do you want to Delete?</h2>
+      <p id="delText">House ID: ?</p>
+      <div class="mactions">
+        <button class="btn-cancel" id="cancelDel">Cancel</button>
+        <button class="btn-del-confirm" id="confirmDel">Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  LONG GONE — SHARED DATA STORE  (localStorage persistence)
+// ═══════════════════════════════════════════════════════════════
+var LG = (function() {
+  var KEY = 'lgHouses';
+
+  var DEFAULTS = [
+    {id:67,name:"Haunted House in the Middle of Salaya",city:"Bangkok",area:"Salaya, Nakhon Pathom",location:"Salaya, Phutthamonthon, Nakhon Pathom, 73170",price:"500,000",type:"rent",rating:4,bedrooms:1,bathrooms:1,basement:1,updated:"16/2/2026",email:"haunted67@longgone.th",phone:"014-254-785",desc:"A historic Victorian-era estate nestled deep within misty Salaya forests. Original hardwood floors, gothic archways, and a sprawling garden of overgrown stone paths.",card:"https://picsum.photos/seed/ghost1/400/300",imgs:["https://picsum.photos/seed/ghost1/900/600","https://picsum.photos/seed/dark7/900/600","https://picsum.photos/seed/manor1/900/600"]},
+    {id:68,name:"Old Victorian Manor",city:"Bangkok",area:"Nongkhok, 10530",location:"Nongkhok, Min Buri, Bangkok, 10530",price:"800,000",type:"buy",rating:5,bedrooms:3,bathrooms:2,basement:1,updated:"10/3/2026",email:"manor68@longgone.th",phone:"012-345-678",desc:"Grand Victorian manor with original stained glass and ornate plasterwork. Three stories of creaking floorboards and hidden passages. Vacant since 1987 after the previous owner mysteriously vanished.",card:"https://picsum.photos/seed/manor2/400/300",imgs:["https://picsum.photos/seed/manor2/900/600","https://picsum.photos/seed/ghost4/900/600","https://picsum.photos/seed/dark3/900/600"]},
+    {id:69,name:"The Whisper House",city:"Chiang Mai",area:"Chiang Mai, 50000",location:"Mueang, Chiang Mai, 50000",price:"300,000",type:"rent",rating:3,bedrooms:2,bathrooms:1,basement:0,updated:"5/4/2026",email:"whisper69@longgone.th",phone:"053-123-456",desc:"A quaint wooden cottage known for strange whispering sounds that emanate from its walls on full moon nights. The structure dates back to the early 1900s.",card:"https://picsum.photos/seed/spooky3/400/300",imgs:["https://picsum.photos/seed/spooky3/900/600","https://picsum.photos/seed/ghost5/900/600","https://picsum.photos/seed/manor3/900/600"]},
+    {id:70,name:"The Crow Estate",city:"Bangkok",area:"Nongkhok, 10530",location:"Nongkhok, Min Buri, Bangkok, 10530",price:"650,000",type:"buy",rating:4,bedrooms:2,bathrooms:2,basement:1,updated:"2/4/2026",email:"crow70@longgone.th",phone:"014-789-012",desc:"A secluded estate shrouded in century-old banyan trees, notorious for unexplained phenomena. The property includes a private cemetery from the original landowners.",card:"https://picsum.photos/seed/dark4/400/300",imgs:["https://picsum.photos/seed/dark4/900/600","https://picsum.photos/seed/spooky6/900/600","https://picsum.photos/seed/ghost1/900/600"]},
+    {id:71,name:"The Mist Manor",city:"Chiang Rai",area:"Chiang Rai, 57000",location:"Mueang, Chiang Rai, 57000",price:"420,000",type:"rent",rating:5,bedrooms:2,bathrooms:1,basement:0,updated:"1/4/2026",email:"mist71@longgone.th",phone:"053-987-654",desc:"Perched on a hillside forever shrouded in morning mist. The previous tenants left all belongings behind — their whereabouts remain unknown.",card:"https://picsum.photos/seed/manor5/400/300",imgs:["https://picsum.photos/seed/manor5/900/600","https://picsum.photos/seed/dark2/900/600","https://picsum.photos/seed/ghost3/900/600"]},
+    {id:72,name:"Shadowfall Cottage",city:"Phuket",area:"Kathu, Phuket",location:"Kathu, Phuket, 83120",price:"350,000",type:"rent",rating:4,bedrooms:1,bathrooms:1,basement:1,updated:"28/3/2026",email:"shadow72@longgone.th",phone:"076-123-456",desc:"A colonial-era bungalow hidden among rubber trees. Guests report hearing old gramophone music late at night.",card:"https://picsum.photos/seed/ghost6/400/300",imgs:["https://picsum.photos/seed/ghost6/900/600","https://picsum.photos/seed/manor4/900/600","https://picsum.photos/seed/spooky2/900/600"]},
+    {id:73,name:"The Hollow Keep",city:"Ayutthaya",area:"Ayutthaya, 13000",location:"Phra Nakhon Si Ayutthaya, Ayutthaya, 13000",price:"750,000",type:"buy",rating:5,bedrooms:4,bathrooms:3,basement:2,updated:"15/3/2026",email:"hollow73@longgone.th",phone:"035-123-456",desc:"Built on ruins of a 17th century fort. The basement rooms are rumored to connect to ancient underground passages.",card:"https://picsum.photos/seed/dark7/400/300",imgs:["https://picsum.photos/seed/dark7/900/600","https://picsum.photos/seed/ghost2/900/600","https://picsum.photos/seed/manor6/900/600"]},
+    {id:74,name:"Widow's Peak House",city:"Chiang Mai",area:"Doi Saket, Chiang Mai",location:"Doi Saket, Chiang Mai, 50220",price:"280,000",type:"rent",rating:3,bedrooms:2,bathrooms:1,basement:0,updated:"10/3/2026",email:"widow74@longgone.th",phone:"053-456-789",desc:"Perched atop a rocky hill. The original owner's rocking chair still moves on windless nights.",card:"https://picsum.photos/seed/spooky8/400/300",imgs:["https://picsum.photos/seed/spooky8/900/600","https://picsum.photos/seed/manor7/900/600","https://picsum.photos/seed/dark5/900/600"]}
+  ];
+
+  function load(){try{var r=localStorage.getItem(KEY);if(r)return JSON.parse(r);}catch(e){}save(DEFAULTS);return JSON.parse(JSON.stringify(DEFAULTS));}
+  function save(arr){try{localStorage.setItem(KEY,JSON.stringify(arr));}catch(e){}}
+  function today(){var d=new Date();return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();}
+  function getAll(){return load();}
+  function getById(id){return load().find(function(h){return h.id===parseInt(id);})||null;}
+  function update(id,patch){var arr=load();var i=arr.findIndex(function(h){return h.id===parseInt(id);});if(i===-1)return false;Object.keys(patch).forEach(function(k){arr[i][k]=patch[k];});arr[i].updated=today();save(arr);return true;}
+  function add(house){var arr=load();var maxId=arr.reduce(function(m,h){return Math.max(m,h.id);},0);house.id=house.id&&!arr.find(function(h){return h.id===parseInt(house.id);})?parseInt(house.id):maxId+1;house.updated=today();house.card=house.card||'https://picsum.photos/seed/new'+house.id+'/400/300';house.imgs=house.imgs||['https://picsum.photos/seed/new'+house.id+'/900/600','https://picsum.photos/seed/new'+house.id+'b/900/600','https://picsum.photos/seed/new'+house.id+'c/900/600'];house.rating=house.rating||3;house.bedrooms=house.bedrooms||1;house.bathrooms=house.bathrooms||1;house.basement=house.basement||0;house.email=house.email||'info@longgone.th';house.phone=house.phone||'—';house.desc=house.desc||'A mysterious haunted property awaiting its next resident.';arr.push(house);save(arr);return house;}
+  function remove(id){save(load().filter(function(h){return h.id!==parseInt(id);}));}
+  function reset(){localStorage.removeItem(KEY);}
+  return{getAll:getAll,getById:getById,update:update,add:add,remove:remove,reset:reset};
+})();
+
+
+// Set admin username in sidebar
+document.getElementById('userName').textContent = getAdminUser();
+document.getElementById('userInitial').textContent = getAdminUser().charAt(0).toUpperCase();
+document.getElementById('topAvatar').innerHTML = getAdminUser().charAt(0).toUpperCase() + '<span class="notif" id="notifBadge">3</span>';
+
+// ── HOUSE DATA ────────────────────────────────────────────────────────────────
+var HOUSES = LG.getAll();
+
+// ── RENDER STATS ──────────────────────────────────────────────────────────────
+function renderStats() {
+  var total = HOUSES.length;
+  var buy   = HOUSES.filter(function(h){return h.type==='buy';}).length;
+  var rent  = HOUSES.filter(function(h){return h.type==='rent';}).length;
+  document.getElementById('statsRow').innerHTML =
+    '<div class="stat-card"><div class="stat-label">Total Listings</div><div class="stat-val">'+total+'</div><div class="stat-sub">Active properties</div></div>' +
+    '<div class="stat-card"><div class="stat-label">For Sale</div><div class="stat-val">'+buy+'</div><div class="stat-sub">Buy listings</div></div>' +
+    '<div class="stat-card"><div class="stat-label">For Rent</div><div class="stat-val">'+rent+'</div><div class="stat-sub">Rent listings</div></div>';
+}
+
+// ── RENDER TABLE ──────────────────────────────────────────────────────────────
+function renderTable(data) {
+  var tb = document.getElementById('tBody');
+  tb.innerHTML = '';
+  if (!data.length) {
+    tb.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#888;font-style:italic;">No results found.</td></tr>';
+    return;
+  }
+  data.forEach(function(h) {
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><img class="house-thumb-sm" src="'+(h.card||'https://picsum.photos/seed/house'+h.id+'/200/140')+'" alt=""/></td>' +
+      '<td style="font-weight:600">'+h.name+'</td>' +
+      '<td style="color:#888">'+h.id+'</td>' +
+      '<td><span class="badge badge-'+h.type+'">'+(h.type==='buy'?'Buy':'Rent')+'</span></td>' +
+      '<td style="color:#8b0000;font-weight:600">'+h.price+' THB</td>' +
+      '<td style="color:#666">'+h.location+'</td>' +
+      '<td style="color:#888">'+h.updated+'</td>' +
+      '<td><div class="action-btns">' +
+        '<button class="btn-view" onclick="location.href=\'house-detail.html?id='+h.id+'\'">View</button>' +
+        '<button class="btn-edit" onclick="location.href=\'edit-house.html?id='+h.id+'\'">Edit</button>' +
+        '<button class="btn-delete" onclick="openDel('+h.id+',\''+h.name.replace(/'/g,"\\'")+'\')" >Delete</button>' +
+      '</div></td>';
+    tb.appendChild(tr);
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderStats();
+renderTable(HOUSES);
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+document.getElementById('searchBtn').addEventListener('click', function() {
+  var q = document.getElementById('searchInput').value.toLowerCase().trim();
+  renderTable(q
+    ? HOUSES.filter(function(h){return h.name.toLowerCase().includes(q)||String(h.id).includes(q)||h.location.toLowerCase().includes(q);})
+    : HOUSES
+  );
+});
+document.getElementById('searchInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('searchBtn').click();
+});
+
+// ── ADD ───────────────────────────────────────────────────────────────────────
+document.getElementById('addBtn').addEventListener('click', function() {
+  document.getElementById('addModal').classList.add('show');
+});
+document.getElementById('cancelAdd').addEventListener('click', function() {
+  document.getElementById('addModal').classList.remove('show');
+});
+document.getElementById('confirmAdd').addEventListener('click', function() {
+  var name  = document.getElementById('newName').value.trim();
+  var id    = document.getElementById('newId').value.trim();
+  var loc   = document.getElementById('newLoc').value.trim();
+  var price = document.getElementById('newPrice').value.trim();
+  var type  = document.getElementById('newType').value;
+  if (!name || !id) { alert('Please fill in House Name and House ID.'); return; }
+
+  // Add to local array and re-render
+  var newHouse = LG.add({
+    id: parseInt(id) || null,
+    name: name,
+    type: type,
+    price: price ? parseInt(price).toLocaleString() : '0',
+    location: loc || '—',
+    city: loc ? loc.split(',')[0].trim() : '—',
+    area: loc || '—'
+  });
+  HOUSES = LG.getAll();
+  document.getElementById('addModal').classList.remove('show');
+  // Clear fields
+  ['newName','newId','newLoc','newPrice'].forEach(function(fid){document.getElementById(fid).value='';});
+  renderStats();
+  renderTable(HOUSES);
+  showToast('House "' + name + '" added successfully!');
+});
+
+// ── DELETE ────────────────────────────────────────────────────────────────────
+var delId = null;
+function openDel(id, name) {
+  delId = id;
+  document.getElementById('delText').textContent = 'House ID: ' + id + ' — "' + name + '"';
+  document.getElementById('deleteModal').classList.add('show');
+}
+document.getElementById('cancelDel').addEventListener('click', function() {
+  document.getElementById('deleteModal').classList.remove('show');
+});
+document.getElementById('confirmDel').addEventListener('click', function() {
+  LG.remove(delId);
+  HOUSES = LG.getAll();
+  document.getElementById('deleteModal').classList.remove('show');
+  renderStats();
+  renderTable(HOUSES);
+  showToast('House deleted.');
+});
+
+// ── CLOSE MODALS ON OVERLAY CLICK ────────────────────────────────────────────
+['addModal','deleteModal'].forEach(function(id) {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('show');
+  });
+});
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.remove(); }, 3500);
+}
+
+// ── SUCCESS MESSAGE FROM REDIRECT ────────────────────────────────────────────
+(function(){
+  var sp = new URLSearchParams(location.search);
+  var msg = sp.get('success') || sp.get('msg');
+  if (msg) showToast(decodeURIComponent(msg));
+})();
+</script>
+</body>
+</html>

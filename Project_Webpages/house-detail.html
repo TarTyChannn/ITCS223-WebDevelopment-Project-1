@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>House Detail — Long Gone</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--blood:#8b0000;--blood-light:#b30000;--dark:#111010;--dark2:#1a1919;--dark3:#252525;--font-display:'Cinzel',serif;--font-body:'Crimson Text',serif;}
+body{background:var(--dark);color:#fff;font-family:var(--font-body);min-height:100vh;}
+nav{background:var(--dark);position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;border-bottom:1px solid #2a2a2a;}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{color:#ccc;text-decoration:none;font-family:var(--font-display);font-size:13px;letter-spacing:1px;transition:color .2s;}
+.nav-links a:hover{color:#fff;}
+.nav-brand{font-family:var(--font-display);font-size:22px;letter-spacing:4px;color:#fff;text-decoration:none;position:absolute;left:50%;transform:translateX(-50%);}
+.admin-btn{background:var(--blood);color:#fff;border:none;padding:7px 16px;border-radius:3px;font-family:var(--font-display);font-size:12px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .2s;}
+.admin-btn:hover{background:var(--blood-light);}
+.container{max-width:1200px;margin:0 auto;padding:28px 32px 80px;}
+.back-link{color:#888;font-size:13px;display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;cursor:pointer;transition:color .2s;text-decoration:none;font-family:var(--font-display);letter-spacing:1px;}
+.back-link:hover{color:#fff;}
+.detail-layout{display:grid;grid-template-columns:180px 1fr 340px;gap:24px;align-items:start;}
+.thumb-col{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.thumb-nav{background:none;border:none;color:#666;font-size:22px;cursor:pointer;padding:2px 8px;transition:color .2s;}
+.thumb-nav:hover{color:#fff;}
+.thumb-item{width:155px;height:105px;object-fit:cover;border-radius:7px;cursor:pointer;border:2px solid transparent;transition:border-color .2s;filter:brightness(.65) contrast(1.2) saturate(.5);background:#1a1919;}
+.thumb-item:hover,.thumb-item.active{border-color:var(--blood);}
+.main-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;filter:brightness(.7) contrast(1.15) saturate(.55);display:block;background:#1a1919;}
+.detail-title{font-family:var(--font-display);font-size:26px;font-weight:700;line-height:1.3;margin-bottom:16px;}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.tag{background:#2a2a2a;border-radius:20px;padding:4px 14px;font-size:13px;color:#bbb;}
+.info-row{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px;}
+.info-label{font-family:var(--font-display);font-size:13px;letter-spacing:1px;color:#888;min-width:70px;padding-top:3px;}
+.skulls-lg{font-size:22px;display:flex;}
+.price-val{font-size:28px;font-weight:700;color:#3ddc84;font-family:var(--font-display);}
+.map-ph{width:155px;height:100px;border-radius:8px;background:#0d1a0d;border:1px solid #2a3a2a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;color:#4a8a4a;font-size:12px;font-family:var(--font-display);letter-spacing:1px;text-align:center;padding:8px;}
+.request-btn{display:block;width:100%;background:var(--blood);color:#fff;border:none;border-radius:8px;padding:16px;font-family:var(--font-display);font-size:16px;letter-spacing:1px;cursor:pointer;transition:background .2s;text-align:center;margin-top:20px;}
+.request-btn:hover{background:var(--blood-light);}
+/* Admin edit bar - only shown when logged in as admin */
+.admin-edit-bar{display:none;background:rgba(17,16,16,.97);border-top:2px solid var(--blood);padding:12px 32px;position:fixed;bottom:0;left:0;right:0;z-index:50;align-items:center;justify-content:space-between;}
+.admin-edit-bar.show{display:flex;}
+.aeb-left{font-family:var(--font-display);font-size:12px;letter-spacing:1px;color:#888;}
+.aeb-left strong{color:#3ddc84;}
+.aeb-btns{display:flex;gap:10px;}
+.aeb-btn{border:none;border-radius:5px;padding:8px 18px;font-family:var(--font-display);font-size:12px;letter-spacing:.5px;cursor:pointer;transition:opacity .2s;}
+.aeb-btn:hover{opacity:.85;}
+.aeb-edit{background:#c8941a;color:#fff;}
+.aeb-logout{background:#444;color:#ccc;}
+.detail-body{margin-top:40px;}
+.detail-row{display:grid;grid-template-columns:180px 1fr 340px;gap:24px;padding:24px 0;border-top:1px solid #222;align-items:start;}
+.detail-row:last-child{border-bottom:1px solid #222;}
+.row-label{font-family:var(--font-display);font-size:15px;font-weight:600;color:#fff;}
+.row-val{font-size:16px;color:#bbb;line-height:1.7;}
+.contact-card{background:var(--dark3);border-radius:10px;padding:22px;}
+.contact-card h3{font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:12px;}
+.contact-card p{font-size:14px;color:#bbb;line-height:2;}
+.contact-card a{color:var(--blood-light);text-decoration:none;}
+/* Modal */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;align-items:center;justify-content:center;}
+.overlay.show{display:flex;}
+.modal{background:#1e1e1e;border-radius:14px;padding:36px;min-width:380px;max-width:480px;width:90%;border:1px solid #333;animation:popIn .2s ease;}
+@keyframes popIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.modal h2{font-family:var(--font-display);font-size:20px;margin-bottom:20px;color:#fff;}
+.mfield{margin-bottom:16px;}
+.mfield label{display:block;font-size:12px;color:#aaa;margin-bottom:6px;font-family:var(--font-display);letter-spacing:1px;}
+.mfield input,.mfield textarea{width:100%;background:#2a2a2a;border:1px solid #444;border-radius:6px;padding:10px 14px;font-size:15px;color:#fff;outline:none;font-family:var(--font-body);}
+.mfield textarea{height:80px;resize:vertical;}
+.mactions{display:flex;gap:12px;margin-top:8px;}
+.btn-cancel{flex:1;background:#444;color:#fff;border:none;border-radius:6px;padding:11px;font-family:var(--font-display);font-size:13px;cursor:pointer;}
+.btn-submit{flex:2;background:var(--blood);color:#fff;border:none;border-radius:6px;padding:11px;font-family:var(--font-display);font-size:13px;cursor:pointer;}
+.btn-submit:hover{background:var(--blood-light);}
+footer{background:var(--dark);border-top:1px solid #2a2a2a;text-align:center;padding:24px;font-family:var(--font-display);font-size:12px;letter-spacing:2px;color:#555;}
+@media(max-width:900px){.detail-layout,.detail-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-links">
+    <a href="buy.html">Buy</a>
+    <a href="rent.html">Rent</a>
+    <a href="team.html">Our Team</a>
+  </div>
+  <a class="nav-brand" href="homepage.html">Long Gone</a>
+  <div><button class="admin-btn" id="adminBtn">&#128274; Admin</button></div>
+</nav>
+<div class="container">
+  <a class="back-link" onclick="history.back()">&#8592; Return</a>
+  <div class="detail-layout">
+    <div class="thumb-col">
+      <button class="thumb-nav" id="thumbUp">&#8963;</button>
+      <div id="thumbList"></div>
+      <button class="thumb-nav" id="thumbDown">&#8964;</button>
+    </div>
+    <img class="main-img" id="mainImg" src="" alt=""/>
+    <div id="detailInfo"></div>
+  </div>
+  <div class="detail-body" id="detailBody"></div>
+</div>
+<footer>&copy; 2024 Long Gone &mdash; All Spirits Reserved</footer>
+
+<!-- Admin edit bar (admin only) -->
+<div class="admin-edit-bar" id="adminBar">
+  <span class="aeb-left">&#128274; Admin Mode — logged in as <strong id="adminBarUser"></strong></span>
+  <div class="aeb-btns">
+    <button class="aeb-btn aeb-edit" id="editThisBtn">&#9998; Edit This House</button>
+    <button class="aeb-btn aeb-logout" onclick="doLogout()">Sign Out</button>
+  </div>
+</div>
+
+<!-- Viewing Modal -->
+<div class="overlay" id="viewModal">
+  <div class="modal">
+    <h2>&#128197; Request a Viewing</h2>
+    <div class="mfield"><label>Your Name</label><input type="text" id="vName" placeholder="Full Name"/></div>
+    <div class="mfield"><label>Phone / Email</label><input type="text" id="vContact" placeholder="Contact info"/></div>
+    <div class="mfield"><label>Preferred Date</label><input type="date" id="vDate"/></div>
+    <div class="mfield"><label>Message</label><textarea id="vMsg" placeholder="Any additional notes..."></textarea></div>
+    <div class="mactions">
+      <button class="btn-cancel" onclick="document.getElementById('viewModal').classList.remove('show')">Cancel</button>
+      <button class="btn-submit" id="submitViewing">Submit Request</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  LONG GONE — SHARED DATA STORE  (localStorage persistence)
+// ═══════════════════════════════════════════════════════════════
+var LG = (function() {
+  var KEY = 'lgHouses';
+
+  var DEFAULTS = [
+    {id:67,name:"Haunted House in the Middle of Salaya",city:"Bangkok",area:"Salaya, Nakhon Pathom",location:"Salaya, Phutthamonthon, Nakhon Pathom, 73170",price:"500,000",type:"rent",rating:4,bedrooms:1,bathrooms:1,basement:1,updated:"16/2/2026",email:"haunted67@longgone.th",phone:"014-254-785",desc:"A historic Victorian-era estate nestled deep within misty Salaya forests. Original hardwood floors, gothic archways, and a sprawling garden of overgrown stone paths.",card:"https://picsum.photos/seed/ghost1/400/300",imgs:["https://picsum.photos/seed/ghost1/900/600","https://picsum.photos/seed/dark7/900/600","https://picsum.photos/seed/manor1/900/600"]},
+    {id:68,name:"Old Victorian Manor",city:"Bangkok",area:"Nongkhok, 10530",location:"Nongkhok, Min Buri, Bangkok, 10530",price:"800,000",type:"buy",rating:5,bedrooms:3,bathrooms:2,basement:1,updated:"10/3/2026",email:"manor68@longgone.th",phone:"012-345-678",desc:"Grand Victorian manor with original stained glass and ornate plasterwork. Three stories of creaking floorboards and hidden passages. Vacant since 1987 after the previous owner mysteriously vanished.",card:"https://picsum.photos/seed/manor2/400/300",imgs:["https://picsum.photos/seed/manor2/900/600","https://picsum.photos/seed/ghost4/900/600","https://picsum.photos/seed/dark3/900/600"]},
+    {id:69,name:"The Whisper House",city:"Chiang Mai",area:"Chiang Mai, 50000",location:"Mueang, Chiang Mai, 50000",price:"300,000",type:"rent",rating:3,bedrooms:2,bathrooms:1,basement:0,updated:"5/4/2026",email:"whisper69@longgone.th",phone:"053-123-456",desc:"A quaint wooden cottage known for strange whispering sounds that emanate from its walls on full moon nights. The structure dates back to the early 1900s.",card:"https://picsum.photos/seed/spooky3/400/300",imgs:["https://picsum.photos/seed/spooky3/900/600","https://picsum.photos/seed/ghost5/900/600","https://picsum.photos/seed/manor3/900/600"]},
+    {id:70,name:"The Crow Estate",city:"Bangkok",area:"Nongkhok, 10530",location:"Nongkhok, Min Buri, Bangkok, 10530",price:"650,000",type:"buy",rating:4,bedrooms:2,bathrooms:2,basement:1,updated:"2/4/2026",email:"crow70@longgone.th",phone:"014-789-012",desc:"A secluded estate shrouded in century-old banyan trees, notorious for unexplained phenomena. The property includes a private cemetery from the original landowners.",card:"https://picsum.photos/seed/dark4/400/300",imgs:["https://picsum.photos/seed/dark4/900/600","https://picsum.photos/seed/spooky6/900/600","https://picsum.photos/seed/ghost1/900/600"]},
+    {id:71,name:"The Mist Manor",city:"Chiang Rai",area:"Chiang Rai, 57000",location:"Mueang, Chiang Rai, 57000",price:"420,000",type:"rent",rating:5,bedrooms:2,bathrooms:1,basement:0,updated:"1/4/2026",email:"mist71@longgone.th",phone:"053-987-654",desc:"Perched on a hillside forever shrouded in morning mist. The previous tenants left all belongings behind — their whereabouts remain unknown.",card:"https://picsum.photos/seed/manor5/400/300",imgs:["https://picsum.photos/seed/manor5/900/600","https://picsum.photos/seed/dark2/900/600","https://picsum.photos/seed/ghost3/900/600"]},
+    {id:72,name:"Shadowfall Cottage",city:"Phuket",area:"Kathu, Phuket",location:"Kathu, Phuket, 83120",price:"350,000",type:"rent",rating:4,bedrooms:1,bathrooms:1,basement:1,updated:"28/3/2026",email:"shadow72@longgone.th",phone:"076-123-456",desc:"A colonial-era bungalow hidden among rubber trees. Guests report hearing old gramophone music late at night.",card:"https://picsum.photos/seed/ghost6/400/300",imgs:["https://picsum.photos/seed/ghost6/900/600","https://picsum.photos/seed/manor4/900/600","https://picsum.photos/seed/spooky2/900/600"]},
+    {id:73,name:"The Hollow Keep",city:"Ayutthaya",area:"Ayutthaya, 13000",location:"Phra Nakhon Si Ayutthaya, Ayutthaya, 13000",price:"750,000",type:"buy",rating:5,bedrooms:4,bathrooms:3,basement:2,updated:"15/3/2026",email:"hollow73@longgone.th",phone:"035-123-456",desc:"Built on ruins of a 17th century fort. The basement rooms are rumored to connect to ancient underground passages.",card:"https://picsum.photos/seed/dark7/400/300",imgs:["https://picsum.photos/seed/dark7/900/600","https://picsum.photos/seed/ghost2/900/600","https://picsum.photos/seed/manor6/900/600"]},
+    {id:74,name:"Widow's Peak House",city:"Chiang Mai",area:"Doi Saket, Chiang Mai",location:"Doi Saket, Chiang Mai, 50220",price:"280,000",type:"rent",rating:3,bedrooms:2,bathrooms:1,basement:0,updated:"10/3/2026",email:"widow74@longgone.th",phone:"053-456-789",desc:"Perched atop a rocky hill. The original owner's rocking chair still moves on windless nights.",card:"https://picsum.photos/seed/spooky8/400/300",imgs:["https://picsum.photos/seed/spooky8/900/600","https://picsum.photos/seed/manor7/900/600","https://picsum.photos/seed/dark5/900/600"]}
+  ];
+
+  function load(){try{var r=localStorage.getItem(KEY);if(r)return JSON.parse(r);}catch(e){}save(DEFAULTS);return JSON.parse(JSON.stringify(DEFAULTS));}
+  function save(arr){try{localStorage.setItem(KEY,JSON.stringify(arr));}catch(e){}}
+  function today(){var d=new Date();return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();}
+  function getAll(){return load();}
+  function getById(id){return load().find(function(h){return h.id===parseInt(id);})||null;}
+  function update(id,patch){var arr=load();var i=arr.findIndex(function(h){return h.id===parseInt(id);});if(i===-1)return false;Object.keys(patch).forEach(function(k){arr[i][k]=patch[k];});arr[i].updated=today();save(arr);return true;}
+  function add(house){var arr=load();var maxId=arr.reduce(function(m,h){return Math.max(m,h.id);},0);house.id=house.id&&!arr.find(function(h){return h.id===parseInt(house.id);})?parseInt(house.id):maxId+1;house.updated=today();house.card=house.card||'https://picsum.photos/seed/new'+house.id+'/400/300';house.imgs=house.imgs||['https://picsum.photos/seed/new'+house.id+'/900/600','https://picsum.photos/seed/new'+house.id+'b/900/600','https://picsum.photos/seed/new'+house.id+'c/900/600'];house.rating=house.rating||3;house.bedrooms=house.bedrooms||1;house.bathrooms=house.bathrooms||1;house.basement=house.basement||0;house.email=house.email||'info@longgone.th';house.phone=house.phone||'—';house.desc=house.desc||'A mysterious haunted property awaiting its next resident.';arr.push(house);save(arr);return house;}
+  function remove(id){save(load().filter(function(h){return h.id!==parseInt(id);}));}
+  function reset(){localStorage.removeItem(KEY);}
+  return{getAll:getAll,getById:getById,update:update,add:add,remove:remove,reset:reset};
+})();
+
+
+
+function isAdmin(){if(localStorage.getItem('lgAdmin')==='true'){sessionStorage.setItem('lgAdmin','true');sessionStorage.setItem('lgAdminUser',localStorage.getItem('lgAdminUser')||'Admin');}return sessionStorage.getItem('lgAdmin')==='true';}
+function doLogout(){sessionStorage.removeItem('lgAdmin');localStorage.removeItem('lgAdmin');sessionStorage.removeItem('lgAdminUser');localStorage.removeItem('lgAdminUser');location.href='homepage.html';}
+
+// Nav admin button
+const navBtn=document.getElementById('adminBtn');
+if(isAdmin()){navBtn.textContent='Dashboard';navBtn.onclick=()=>location.href='dashboard.html';}
+else{navBtn.onclick=()=>location.href='admin-login.html';}
+
+// Get house
+const sp=new URLSearchParams(location.search);
+var hid=parseInt(sp.get('id'))||67;
+var H=LG.getById(hid)||LG.getAll()[0];
+document.title=H.name+' — Long Gone';
+
+// Thumbnails
+const thumbList=document.getElementById('thumbList');
+H.imgs.forEach((src,i)=>{
+  const img=document.createElement('img');
+  img.className='thumb-item'+(i===0?' active':'');
+  img.src=src.replace('/900/600','/400/280');
+  img.alt='Image '+(i+1);
+  img.onclick=()=>{document.getElementById('mainImg').src=src;document.querySelectorAll('.thumb-item').forEach(t=>t.classList.remove('active'));img.classList.add('active');};
+  thumbList.appendChild(img);
+});
+document.getElementById('mainImg').src=H.imgs[0];
+document.getElementById('mainImg').alt=H.name;
+
+// Detail info panel
+const typeLabel=H.type==='buy'?'For Sale':'For Rent';
+const typeBg=H.type==='buy'?'#dcfce7':'#dbeafe';
+const typeColor=H.type==='buy'?'#15803d':'#1d4ed8';
+const skullsHtml='&#128128;'.repeat(H.rating)+'<span style="opacity:.25">'+'&#128128;'.repeat(5-H.rating)+'</span>';
+const tagsHtml=(H.bedrooms?`<span class="tag">${H.bedrooms} Bedroom${H.bedrooms>1?'s':''}</span>`:'')+
+               (H.bathrooms?`<span class="tag">${H.bathrooms} Bathroom${H.bathrooms>1?'s':''}</span>`:'')+
+               (H.basement?`<span class="tag">${H.basement} Basement${H.basement>1?'s':''}</span>`:'');
+
+document.getElementById('detailInfo').innerHTML=`
+  <h1 class="detail-title">${H.name}</h1>
+  <div class="tags"><span style="background:${typeBg};color:${typeColor};border-radius:20px;padding:4px 14px;font-size:13px;font-family:var(--font-display)">${typeLabel}</span>${tagsHtml}</div>
+  <div class="info-row">
+    <span class="info-label">Rating</span>
+    <div class="skulls-lg">${skullsHtml}</div>
+    <div class="map-ph">&#128205;<span>${H.location.split(',').slice(-2).join(',').trim()}</span></div>
+  </div>
+  <div class="info-row">
+    <span class="info-label">Price</span>
+    <span class="price-val">${H.price} THB${H.type==='rent'?'<span style="font-size:16px;color:#888;font-family:var(--font-body)">/mo</span>':''}</span>
+  </div>
+  <button class="request-btn" id="requestBtn">&#128197; Request Viewing</button>
+`;
+
+document.getElementById('detailBody').innerHTML=`
+  <div class="detail-row">
+    <span class="row-label">Description</span>
+    <p class="row-val">${H.desc}</p>
+    <div></div>
+  </div>
+  <div class="detail-row">
+    <span class="row-label">House ID</span>
+    <span class="row-val">${H.id}</span>
+    <div></div>
+  </div>
+  <div class="detail-row">
+    <span class="row-label">Location</span>
+    <span class="row-val">${H.location}</span>
+    <div class="contact-card">
+      <h3>Contact</h3>
+      <p>Email: <a href="mailto:${H.email}">${H.email}</a><br>Phone: <a href="tel:${H.phone}">${H.phone}</a></p>
+    </div>
+  </div>
+  <div class="detail-row">
+    <span class="row-label">Last Updated</span>
+    <span class="row-val">${H.updated}</span>
+    <div></div>
+  </div>
+`;
+
+// Admin bar - ONLY show if logged in as admin
+if(isAdmin()){
+  const bar=document.getElementById('adminBar');
+  bar.classList.add('show');
+  const user=sessionStorage.getItem('lgAdminUser')||localStorage.getItem('lgAdminUser')||'Admin';
+  document.getElementById('adminBarUser').textContent=user;
+  document.getElementById('editThisBtn').onclick=()=>location.href='edit-house.html?id='+H.id;
+  // Add padding to body so content isn't hidden behind bar
+  document.body.style.paddingBottom='60px';
+}
+
+// Request viewing
+document.getElementById('requestBtn').addEventListener('click',()=>document.getElementById('viewModal').classList.add('show'));
+document.getElementById('submitViewing').addEventListener('click',()=>{
+  const name=document.getElementById('vName').value.trim();
+  const contact=document.getElementById('vContact').value.trim();
+  if(!name||!contact){alert('Please fill in your name and contact info.');return;}
+  document.getElementById('viewModal').classList.remove('show');
+  location.href='success.html?from=detail&id='+H.id+'&msg='+encodeURIComponent('Your viewing request for "'+H.name+'" has been submitted!');
+});
+document.getElementById('viewModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
+
+// Thumb navigation
+let tOff=0;
+document.getElementById('thumbUp').addEventListener('click',()=>{tOff=Math.max(0,tOff-1);updateThumbs();});
+document.getElementById('thumbDown').addEventListener('click',()=>{tOff=Math.min(H.imgs.length-1,tOff+1);updateThumbs();});
+function updateThumbs(){document.querySelectorAll('.thumb-item').forEach((img,i)=>img.style.display=i>=tOff&&i<tOff+3?'block':'none');}
+</script>
+</body>
+</html>
