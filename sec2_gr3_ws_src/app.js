@@ -24,9 +24,6 @@ app.use(router)
 router.use(express.json())
 router.use(express.urlencoded({extended: true}))
 
-// ============================================================
-// code here
-// ============================================================
 
 // ------------------------------------------------------------
 // 1. SEARCH SERVICE
@@ -246,9 +243,6 @@ router.post('/admin/login', function(req, res) {
   })
 })
 
-// ============================================================
-// end code here
-// ============================================================
 
 app.listen(process.env.PORT, function(){
   console.log(`Server listening on port: ${process.env.PORT}`)
