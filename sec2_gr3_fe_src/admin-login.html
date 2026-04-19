@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Login — Long Gone</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--blood:#8b0000;--blood-light:#b30000;--font-display:'Cinzel',serif;--font-body:'Crimson Text',serif;}
+body{font-family:var(--font-body);min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#0a0a0a 0%,#1a0a0a 50%,#0a0a0a 100%);
+  position:relative;overflow:hidden;}
+body::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(139,0,0,.15) 0%,transparent 60%);}
+.card{position:relative;z-index:1;background:rgba(20,18,18,.92);backdrop-filter:blur(16px);
+  border-radius:18px;padding:60px 80px 70px;width:100%;max-width:760px;margin:20px;
+  border:1px solid rgba(139,0,0,.25);box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.back-link{color:#666;text-decoration:none;font-family:var(--font-display);font-size:11px;letter-spacing:1px;
+  display:inline-flex;align-items:center;gap:6px;margin-bottom:40px;transition:color .2s;}
+.back-link:hover{color:#ccc;}
+h1{font-family:var(--font-display);font-size:38px;font-weight:700;color:#fff;text-align:center;line-height:1.25;margin-bottom:8px;letter-spacing:2px;}
+.subtitle{text-align:center;color:#666;font-style:italic;font-size:15px;margin-bottom:44px;}
+.form-row{display:flex;align-items:center;gap:20px;margin-bottom:20px;}
+.form-row label{font-family:var(--font-display);font-size:12px;letter-spacing:1px;color:#aaa;min-width:100px;}
+.form-input{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;
+  padding:13px 16px;font-family:var(--font-body);font-size:15px;color:#fff;outline:none;transition:border-color .2s;}
+.form-input::placeholder{color:#555;}
+.form-input:focus{border-color:var(--blood);}
+.pw-wrap{flex:1;position:relative;}
+.pw-wrap input{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;
+  padding:13px 44px 13px 16px;font-family:var(--font-body);font-size:15px;color:#fff;outline:none;transition:border-color .2s;}
+.pw-wrap input:focus{border-color:var(--blood);}
+.pw-wrap input::placeholder{color:#555;}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;color:#555;transition:color .2s;}
+.pw-toggle:hover{color:#aaa;}
+.form-options{display:flex;align-items:center;justify-content:space-between;margin:8px 0 30px 120px;}
+.remember{display:flex;align-items:center;gap:8px;font-size:13px;color:#666;cursor:pointer;}
+.remember input{accent-color:var(--blood);cursor:pointer;}
+.forgot{color:#555;font-size:11px;text-decoration:none;font-family:var(--font-display);letter-spacing:1px;transition:color .2s;}
+.forgot:hover{color:#aaa;}
+.signin-btn{display:block;width:100%;background:linear-gradient(135deg,#1a7bff,#0f6be0);color:#fff;border:none;border-radius:6px;
+  padding:14px;font-size:14px;font-family:var(--font-display);letter-spacing:1.5px;cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 16px rgba(26,123,255,.3);}
+.signin-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,123,255,.4);}
+.signin-btn:active{transform:translateY(0);}
+.error-msg{color:#ff5555;font-size:13px;text-align:center;margin-top:14px;display:none;font-family:var(--font-display);letter-spacing:1px;padding:10px;background:rgba(255,0,0,.1);border-radius:4px;}
+.hint-box{margin-top:16px;padding:12px 16px;background:rgba(139,0,0,.1);border:1px solid rgba(139,0,0,.2);border-radius:6px;text-align:center;}
+.hint-box p{color:#888;font-size:13px;font-style:italic;}
+.hint-box strong{color:#aaa;}
+@media(max-width:600px){.card{padding:40px 24px;}.form-row{flex-direction:column;align-items:flex-start;gap:6px;}.form-row label{min-width:unset;}.pw-wrap,.form-input{width:100%;}.form-options{margin-left:0;}}
+</style>
+</head>
+<body>
+<div class="card">
+  <a class="back-link" href="homepage.html">&#8592; Back to Home Page</a>
+  <h1>Welcome to<br>Admin Dashboard</h1>
+  <p class="subtitle">Restricted access — authorized personnel only</p>
+  <div class="form-row">
+    <label>Username</label>
+    <input class="form-input" type="text" id="uname" placeholder="username" autocomplete="username"/>
+  </div>
+  <div class="form-row">
+    <label>Password</label>
+    <div class="pw-wrap">
+      <input type="password" id="pw" placeholder="••••••••••" autocomplete="current-password"/>
+      <button class="pw-toggle" id="togglePw" type="button">&#128065;</button>
+    </div>
+  </div>
+  <div class="form-options">
+    <label class="remember"><input type="checkbox" id="rememberMe"/> Remember me</label>
+    <a class="forgot" href="#">Forgot Password?</a>
+  </div>
+  <button class="signin-btn" id="signinBtn">Sign in</button>
+  <p class="error-msg" id="errMsg">Invalid username or password. Please try again.</p>
+  <div class="hint-box">
+    <p>Test account: <strong>Ryu</strong> / <strong>555</strong></p>
+  </div>
+</div>
+<script>
+// Admin credentials
+const ADMIN_USER = 'Ryu';
+const ADMIN_PASS = '555';
+
+document.getElementById('togglePw').addEventListener('click',()=>{
+  const pw=document.getElementById('pw');
+  pw.type=pw.type==='password'?'text':'password';
+});
+
+function doLogin(){
+  const u=document.getElementById('uname').value.trim();
+  const p=document.getElementById('pw').value;
+  const err=document.getElementById('errMsg');
+  if(!u||!p){err.style.display='block';err.textContent='Please enter both username and password.';return;}
+  
+  if(u===ADMIN_USER && p===ADMIN_PASS){
+    // Set admin session
+    sessionStorage.setItem('lgAdmin','true');
+    sessionStorage.setItem('lgAdminUser',u);
+    if(document.getElementById('rememberMe').checked){
+      localStorage.setItem('lgAdmin','true');
+      localStorage.setItem('lgAdminUser',u);
+    }
+    err.style.display='none';
+    location.href='dashboard.html';
+  } else {
+    err.style.display='block';
+    err.textContent='Invalid username or password. Please try again.';
+    document.getElementById('pw').value='';
+    document.getElementById('pw').focus();
+  }
+}
+
+document.getElementById('signinBtn').addEventListener('click',doLogin);
+document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('uname').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('pw').focus();});
+
+// If already logged in, redirect to dashboard
+if(sessionStorage.getItem('lgAdmin')==='true'||localStorage.getItem('lgAdmin')==='true'){
+  sessionStorage.setItem('lgAdmin','true');
+  location.href='dashboard.html';
+}
+</script>
+</body>
+</html>
