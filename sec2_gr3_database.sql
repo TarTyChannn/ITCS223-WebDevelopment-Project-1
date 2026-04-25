@@ -1,8 +1,3 @@
--- ============================================================
--- SQL Script generated from Web_Dev_Data_Dictionary.xlsx
--- (Corrected Version)
--- ============================================================
-
 -- Create and select the database
 -- Drop the database if it already exists to start fresh
 DROP DATABASE IF EXISTS long_gone_db;
@@ -157,7 +152,3 @@ CREATE TABLE RequestViewing (
     CONSTRAINT FK_RequestViewing_House FOREIGN KEY (VHouseID)
         REFERENCES House (HouseID)
 );
-
--- ============================================================
--- End of script
--- ============================================================
