@@ -4,88 +4,8 @@
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Search Results — Long Gone</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="common-public-nav.css"/>
 <style>
-
-    *,*::before,*::after {
-        box-sizing:border-box;
-        margin:0;
-        padding:0;
-    }
-
-    :root {
-        --blood:#8b0000;
-        --blood-light:#b30000;
-        --dark:#111010;
-        --font-display:'Cinzel',serif;
-        --font-body:'Crimson Text',serif;
-    }
-
-    body {
-        background:var(--dark);
-        min-height:100vh;
-        font-family:var(--font-body);
-        display:flex;
-        flex-direction:column;
-    }
-
-    nav {
-        background:var(--dark);
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        padding:0 32px;
-        height:56px;
-        border-bottom:1px solid #2a2a2a;
-    }
-
-    .nav-links {
-        display:flex;
-        gap:28px;
-    }
-
-    .nav-links a {
-        color:#ccc;
-        text-decoration:none;
-        font-family:var(--font-display);
-        font-size:13px;
-        letter-spacing:1px;
-        transition:color .2s;
-    }
-
-    .nav-links a:hover {
-        color:#fff;
-    }
-
-    .nav-brand {
-        font-family:var(--font-display);
-        font-size:22px;
-        letter-spacing:4px;
-        color:#fff;
-        text-decoration:none;
-        position:absolute;
-        left:50%;
-        transform:translateX(-50%);
-    }
-
-    .admin-btn {
-        background:var(--blood);
-        color:#fff;
-        border:none;
-        padding:7px 16px;
-        border-radius:3px;
-        font-family:var(--font-display);
-        font-size:12px;
-        letter-spacing:1px;
-        cursor:pointer;
-        display:flex;
-        align-items:center;
-        gap:6px;
-    }
-
-    .admin-btn:hover {
-        background:var(--blood-light);
-    }
-
     .page-wrap {
         flex:1;
         display:flex;
