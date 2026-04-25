@@ -268,9 +268,9 @@ if (!results.length) {
     content.innerHTML = '<div class="no-match">No haunted houses found.<br><br><a href="/" style="color:#8b0000">&#8592; Back to Home</a></div>';
 } else {
     var h = results[0];
-    var adminEditBtn = isAdmin() ? '<button class="btn-edit" id="editBtn" style="display:inline-block" onclick="location.href=\'edit-house.html?id=' + h.id + '\'">Edit</button>' : '';
-    var moreText = results.length > 1 ? '<div style="font-size:13px;color:#888;margin-bottom:8px;font-style:italic">+' + (results.length - 1) + ' more result' + (results.length - 1 > 1 ? 's' : '') + ' — <a href="' + (h.type === 'buy' ? 'buy' : 'rent') + '.html?location=' + encodeURIComponent(loc) + '" style="color:#8b0000">View all</a></div>' : '';
-    var allLink = results.length > 1 ? '<div class="all-link"><a href="' + (h.type === 'buy' ? 'buy' : 'rent') + '.html?location=' + encodeURIComponent(loc) + '&rating=' + minRating + '">View all ' + results.length + ' matches →</a></div>' : '';
+    var adminEditBtn = isAdmin() ? '<button class="btn-edit" id="editBtn" style="display:inline-block" onclick="location.href=\'/admin/edit?id=' + h.id + '\'">Edit</button>' : '';
+    var moreText = results.length > 1 ? '<div style="font-size:13px;color:#888;margin-bottom:8px;font-style:italic">+' + (results.length - 1) + ' more result' + (results.length - 1 > 1 ? 's' : '') + ' — <a href="/' + (h.type === 'buy' ? 'buy' : 'rent') + '?location=' + encodeURIComponent(loc) + '" style="color:#8b0000">View all</a></div>' : '';
+    var allLink = results.length > 1 ? '<div class="all-link"><a href="/' + (h.type === 'buy' ? 'buy' : 'rent') + '?location=' + encodeURIComponent(loc) + '&rating=' + minRating + '">View all ' + results.length + ' matches →</a></div>' : '';
     content.innerHTML =
         '<div class="field"><label>House Name</label><div class="fval">' + h.name + '</div></div>' +
         '<div class="field"><label>House ID</label><div class="fval">' + h.id + '</div></div>' +
@@ -279,7 +279,7 @@ if (!results.length) {
         '<div class="field"><label>Location</label><div class="fval">' + h.area + '</div></div>' +
         '<div class="field"><label>Last Updated</label><div class="fval">' + h.updated + '</div></div>' +
         moreText +
-        '<div class="actions"><button class="btn-return" onclick="history.back()">&#8592; Return</button><button class="btn-view" onclick="location.href=\'house-detail.html?id=' + h.id + '\'">View</button>' + adminEditBtn + '</div>' +
+        '<div class="actions"><button class="btn-return" onclick="history.back()">&#8592; Return</button><button class="btn-view" onclick="location.href=\'/house?id=' + h.id + '\'">View</button>' + adminEditBtn + '</div>' +
         allLink;
 }
         </script>
