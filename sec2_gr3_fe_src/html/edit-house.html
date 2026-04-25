@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Edit House — Long Gone Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/html/common-admin-sidebar.css"/>
+<style>
+    :root {
+        --gold:#c8941a;
+    }
+
+    /* MAIN */
+    .main {
+        margin-left:240px;
+        padding:72px 32px 60px;
+        flex:1;
+    }
+
+    /* EDIT LAYOUT */
+    .edit-layout {
+        display:grid;
+        grid-template-columns:160px 1fr 280px;
+        gap:24px;
+        align-items:start;
+        margin-bottom:24px;
+    }
+
+    .thumb-col {
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .thumb-sm {
+        width:145px;
+        height:96px;
+        object-fit:cover;
+        border-radius:7px;
+        cursor:pointer;
+        border:2px solid transparent;
+        transition:border-color .2s;
+        filter:brightness(.7) contrast(1.1);
+        background:#ccc;
+    }
+
+    .thumb-sm:hover,.thumb-sm.active {
+        border-color:var(--blood);
+    }
+
+    .main-img {
+        width:100%;
+        aspect-ratio:16/10;
+        object-fit:cover;
+        border-radius:10px;
+        filter:brightness(.7) contrast(1.15);
+        display:block;
+        background:#ccc;
+    }
+
+    .edit-info {
+        padding-top:4px;
+    }
+
+    .edit-title {
+        font-family:var(--font-display);
+        font-size:20px;
+        font-weight:700;
+        color:#111;
+        line-height:1.35;
+        margin-bottom:16px;
+    }
+
+    .info-row {
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-bottom:14px;
+    }
+
+    .info-label {
+        font-family:var(--font-display);
+        font-size:12px;
+        color:#666;
+        min-width:55px;
+    }
+
+    .skulls-md {
+        font-size:18px;
+    }
+
+    .price-display {
+        font-size:20px;
+        font-weight:700;
+        color:var(--blood);
+        font-family:var(--font-display);
+    }
+
+    .edit-action-btns {
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+        margin-top:10px;
+    }
+
+    .eab {
+        background:var(--gold);
+        color:#fff;
+        border:none;
+        border-radius:6px;
+        padding:8px 14px;
+        font-family:var(--font-display);
+        font-size:11px;
+        letter-spacing:.5px;
+        cursor:pointer;
+        display:flex;
+        align-items:center;
+        gap:4px;
+        transition:opacity .2s;
+    }
+
+    .eab:hover {
+        opacity:.85;
+    }
+
+    /* DESCRIPTION SECTION */
+    .desc-btn {
+        background:var(--gold);
+        color:#fff;
+        border:none;
+        border-radius:6px;
+        padding:9px 18px;
+        font-family:var(--font-display);
+        font-size:12px;
+        letter-spacing:.5px;
+        cursor:pointer;
+        display:inline-flex;
+        align-items:center;
+        gap:5px;
+        margin-bottom:16px;
+    }
+
+    .section-block {
+        margin-bottom:24px;
+        padding-bottom:24px;
+        border-bottom:1px solid #e0e0e0;
+    }
+
+    .section-block:last-child {
+        border-bottom:none;
+    }
+
+    .section-label {
+        font-family:var(--font-display);
+        font-size:14px;
+        font-weight:700;
+        color:#111;
+        margin-bottom:6px;
+    }
+
+    .section-val {
+        font-size:15px;
+        color:#555;
+        line-height:1.7;
+    }
+
+    /* MODALS */
+    .overlay {
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.4);
+        z-index:200;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .overlay.show {
+        display:flex;
+    }
+
+    .modal {
+        background:#e8e8e8;
+        border-radius:12px;
+        padding:32px;
+        min-width:340px;
+        max-width:460px;
+        width:90%;
+        animation:popIn .18s ease;
+        box-shadow:0 8px 32px rgba(0,0,0,.2);
+    }
+
+    @keyframes popIn {
+        from {
+            transform:scale(.95);
+            opacity:0
+        }
+        to {
+            transform:scale(1);
+            opacity:1
+        }
+    }
+
+    .modal h2 {
+        font-family:var(--font-display);
+        font-size:19px;
+        margin-bottom:20px;
+        color:#111;
+    }
+
+    .mf {
+        display:flex;
+        align-items:flex-start;
+        gap:12px;
+        margin-bottom:16px;
+    }
+
+    .mf label {
+        font-size:14px;
+        color:#333;
+        min-width:90px;
+        padding-top:10px;
+        white-space:nowrap;
+    }
+
+    .mf input,.mf textarea {
+        flex:1;
+        background:#fff;
+        border:1px solid #ddd;
+        border-radius:6px;
+        padding:9px 13px;
+        font-size:14px;
+        color:#333;
+        outline:none;
+        font-family:var(--font-body);
+    }
+
+    .mf input:focus,.mf textarea:focus {
+        border-color:#888;
+    }
+
+    .mf textarea {
+        height:85px;
+        resize:vertical;
+    }
+
+    .mactions {
+        display:flex;
+        gap:11px;
+        justify-content:center;
+        margin-top:14px;
+    }
+
+    .btn-cancel {
+        background:#888;
+        color:#fff;
+        border:none;
+        border-radius:6px;
+        padding:10px 24px;
+        font-family:var(--font-display);
+        font-size:12px;
+        cursor:pointer;
+    }
+
+    .btn-cancel:hover {
+        background:#666;
+    }
+
+    .btn-confirm {
+        background:#2563eb;
+        color:#fff;
+        border:none;
+        border-radius:6px;
+        padding:10px 24px;
+        font-family:var(--font-display);
+        font-size:12px;
+        cursor:pointer;
+    }
+
+    .btn-confirm:hover {
+        background:#1d4ed8;
+    }
+
+    /* Image upload rows */
+    .img-upload-row {
+        display:flex;
+        align-items:center;
+        gap:14px;
+        margin-bottom:12px;
+    }
+
+    .img-upload-row label {
+        font-size:13px;
+        color:#333;
+        min-width:110px;
+    }
+
+    .img-preview-sm {
+        width:60px;
+        height:40px;
+        object-fit:cover;
+        border-radius:4px;
+        border:1px solid #ddd;
+        display:none;
+    }
+
+    .upload-btn-sm {
+        background:#555;
+        color:#fff;
+        border:none;
+        border-radius:5px;
+        padding:7px 14px;
+        font-family:var(--font-display);
+        font-size:11px;
+        cursor:pointer;
+        display:flex;
+        align-items:center;
+        gap:4px;
+    }
+
+    .upload-btn-sm:hover {
+        background:#333;
+    }
+
+    /* TOAST */
+    .toast {
+        position:fixed;
+        bottom:28px;
+        right:28px;
+        background:#2e9e5e;
+        color:#fff;
+        padding:14px 24px;
+        border-radius:8px;
+        font-family:var(--font-display);
+        font-size:13px;
+        letter-spacing:1px;
+        z-index:999;
+        box-shadow:0 4px 16px rgba(0,0,0,.2);
+        animation:toastIn .3s ease;
+    }
+
+    @keyframes toastIn {
+        from {
+            transform:translateY(20px);
+            opacity:0
+        }
+        to {
+            transform:translateY(0);
+            opacity:1
+        }
+    }
+
+    /* FIELD CHANGED HIGHLIGHT */
+    @keyframes flashGreen {
+        0% {
+            background:#d4edda
+        }
+        100% {
+            background:transparent
+        }
+    }
+
+    .changed {
+        animation:flashGreen 1.2s ease;
+    }
+
+
+        </style>
+</head>
+<body>
+
+<script src="/script.js"></script>
+    <script>
+
+
+
+
+
+
+if (!isAdmin()) {
+    location.href = '/admin/login';
+}
+        </script>
+
+<aside class="sidebar">
+  <div class="sidebar-brand" onclick="location.href='/admin/dashboard'">Long Gone</div>
+  <nav class="sidebar-nav">
+    <a href="/admin/dashboard">Dashboard</a>
+    <a href="/admin/dashboard" class="active">Product Management</a>
+  </nav>
+</aside>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <button class="return-btn" onclick="location.href='/admin/dashboard'">&#8592; Return</button>
+    <span class="topbar-title">House Editing</span>
+  </div>
+  <div class="top-av" id="topAv">A</div>
+</div>
+
+<main class="main">
+  <div class="edit-layout">
+    <div class="thumb-col" id="thumbCol"></div>
+    <img class="main-img" id="mainImg" src="" alt=""/>
+    <div class="edit-info" id="editInfo"></div>
+  </div>
+  <button class="desc-btn" id="openDescBtn">&#9998; Edit Description</button>
+  <div id="sections"></div>
+</main>
+
+<!-- NAME MODAL -->
+<div class="overlay" id="nameModal">
+  <div class="modal">
+    <h2>Edit House Name</h2>
+    <div class="mf"><label>House Name</label><input type="text" id="nameIn" placeholder="Enter new name"/></div>
+    <div class="mactions">
+      <button class="btn-cancel" id="cancelName">Return</button>
+      <button class="btn-confirm" id="saveName">Edit</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRICE MODAL -->
+<div class="overlay" id="priceModal">
+  <div class="modal">
+    <h2>Edit House Price</h2>
+    <div class="mf"><label>Price (THB)</label><input type="number" id="priceIn" placeholder="e.g. 500000"/></div>
+    <div class="mactions">
+      <button class="btn-cancel" id="cancelPrice">Return</button>
+      <button class="btn-confirm" id="savePrice">Edit</button>
+    </div>
+  </div>
+</div>
+
+<!-- DESCRIPTION / INFO MODAL -->
+<div class="overlay" id="descModal">
+  <div class="modal">
+    <h2>Edit House Information</h2>
+    <div class="mf"><label>Description</label><textarea id="descIn" placeholder="New description..."></textarea></div>
+    <div class="mf"><label>House ID</label><input type="text" id="idIn" readonly style="background:#f0f0f0;color:#999;cursor:not-allowed;"/></div>
+    <div class="mf"><label>Location</label><input type="text" id="locIn" placeholder="Enter location"/></div>
+    <div class="mactions">
+      <button class="btn-cancel" id="cancelDesc">Return</button>
+      <button class="btn-confirm" id="saveDesc">Edit</button>
+    </div>
+  </div>
+</div>
+
+<!-- IMAGE MODAL -->
+<div class="overlay" id="imgModal">
+  <div class="modal">
+    <h2>Edit House Images</h2>
+    <div class="img-upload-row">
+      <label>Preview Image</label>
+      <img class="img-preview-sm" id="prev0"/>
+      <button class="upload-btn-sm" onclick="triggerFile('imgFile0')">&#11014; Upload</button>
+      <input type="file" id="imgFile0" accept="image/*" style="display:none"/>
+    </div>
+    <div style="margin-left:8px">
+      <div class="img-upload-row">
+        <label>Image 1</label>
+        <img class="img-preview-sm" id="prev1"/>
+        <button class="upload-btn-sm" onclick="triggerFile('imgFile1')">&#11014; Upload</button>
+        <input type="file" id="imgFile1" accept="image/*" style="display:none"/>
+      </div>
+      <div class="img-upload-row">
+        <label>Image 2</label>
+        <img class="img-preview-sm" id="prev2"/>
+        <button class="upload-btn-sm" onclick="triggerFile('imgFile2')">&#11014; Upload</button>
+        <input type="file" id="imgFile2" accept="image/*" style="display:none"/>
+      </div>
+      <div class="img-upload-row">
+        <label>Image 3</label>
+        <img class="img-preview-sm" id="prev3"/>
+        <button class="upload-btn-sm" onclick="triggerFile('imgFile3')">&#11014; Upload</button>
+        <input type="file" id="imgFile3" accept="image/*" style="display:none"/>
+      </div>
+    </div>
+    <div class="mactions">
+      <button class="btn-cancel" id="cancelImg">Return</button>
+      <button class="btn-confirm" id="saveImg">Edit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Set admin avatar
+document.getElementById('topAv').textContent = getAdminUser().charAt(0).toUpperCase();
+
+// ── HOUSE DATA ────────────────────────────────────────────────────────────────
+
+var sp = new URLSearchParams(location.search);
+var hid = parseInt(sp.get('id')) || 67;
+var H = LG.getById(hid) || LG.getAll()[0];
+
+document.title = 'Edit: ' + H.name + ' — Long Gone Admin';
+
+// ── TOAST ──────────────────────────────────────────────────────────────────────
+
+
+// ── RENDER ─────────────────────────────────────────────────────────────────────
+function renderThumbs() {
+    var col = document.getElementById('thumbCol');
+    col.innerHTML = '';
+    H.imgs.forEach(function(src, i) {
+        var img = document.createElement('img');
+        img.className = 'thumb-sm' + (i === 0 ? ' active' : '');
+        img.src = src;
+        img.alt = 'Thumbnail ' + (i + 1);
+        img.onclick = function() {
+            document.getElementById('mainImg').src = src;
+            document.querySelectorAll('.thumb-sm').forEach(function(t) {
+                t.classList.remove('active');
+            });
+            img.classList.add('active');
+        };
+        col.appendChild(img);
+    });
+}
+
+function renderInfo() {
+    var skulls = '&#128128;'.repeat(H.rating) + '<span style="opacity:.25">' + '&#128128;'.repeat(5 - H.rating) + '</span>';
+    document.getElementById('editInfo').innerHTML =
+        '<h2 class="edit-title" id="dispTitle">' + H.name + '</h2>' +
+        '<div class="info-row"><span class="info-label">Rating</span><div class="skulls-md">' + skulls + '</div></div>' +
+        '<div class="info-row"><span class="info-label">Price</span><span class="price-display" id="dispPrice">' + H.price + ' THB</span></div>' +
+        '<div class="edit-action-btns">' +
+        '<button class="eab" id="openImgBtn">&#9998; Edit Image</button>' +
+        '<button class="eab" id="openPriceBtn">&#9998; Edit Price</button>' +
+        '<button class="eab" id="openNameBtn">&#9998; Edit Name</button>' +
+        '</div>';
+    // Attach button listeners AFTER injecting HTML
+    document.getElementById('openImgBtn').onclick = function() {
+        openModal('imgModal');
+    };
+    document.getElementById('openPriceBtn').onclick = function() {
+        openModal('priceModal');
+    };
+    document.getElementById('openNameBtn').onclick = function() {
+        openModal('nameModal');
+    };
+}
+
+function renderSections() {
+    document.getElementById('sections').innerHTML =
+        '<div class="section-block">' +
+        '<div class="section-label">Description</div>' +
+        '<div class="section-val" id="dispDesc">' + H.desc + '</div>' +
+        '</div>' +
+        '<div class="section-block">' +
+        '<div class="section-label">House ID</div>' +
+        '<div class="section-val">' + H.id + '</div>' +
+        '</div>' +
+        '<div class="section-block">' +
+        '<div class="section-label">Location</div>' +
+        '<div class="section-val" id="dispLoc">' + H.location + '</div>' +
+        '</div>';
+}
+
+// ── INITIAL RENDER ─────────────────────────────────────────────────────────────
+renderThumbs();
+renderInfo();
+renderSections();
+document.getElementById('mainImg').src = H.imgs[0];
+
+// ── MODAL HELPERS ─────────────────────────────────────────────────────────────
+function openModal(id) {
+    document.getElementById(id).classList.add('show');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+}
+
+// Close on overlay click
+['nameModal', 'priceModal', 'descModal', 'imgModal'].forEach(function(id) {
+    document.getElementById(id).addEventListener('click', function(e) {
+        if (e.target === this) closeModal(id);
+    });
+});
+
+// ── OPEN DESCRIPTION MODAL ─────────────────────────────────────────────────────
+document.getElementById('openDescBtn').addEventListener('click', function() {
+    document.getElementById('descIn').value = H.desc;
+    document.getElementById('idIn').value = H.id;
+    document.getElementById('locIn').value = H.location;
+    openModal('descModal');
+});
+
+// ── CANCEL BUTTONS ─────────────────────────────────────────────────────────────
+document.getElementById('cancelName').addEventListener('click', function() {
+    closeModal('nameModal');
+});
+document.getElementById('cancelPrice').addEventListener('click', function() {
+    closeModal('priceModal');
+});
+document.getElementById('cancelDesc').addEventListener('click', function() {
+    closeModal('descModal');
+});
+document.getElementById('cancelImg').addEventListener('click', function() {
+    closeModal('imgModal');
+});
+
+// ── SAVE NAME ──────────────────────────────────────────────────────────────────
+document.getElementById('saveName').addEventListener('click', function() {
+    var v = document.getElementById('nameIn').value.trim();
+    if (!v) {
+        alert('Please enter a house name.');
+        return;
+    }
+
+    // Update data
+    H.name = v;
+    LG.update(H.id, {
+        name: v
+    });
+
+    // Update DOM immediately — no redirect needed
+    var el = document.getElementById('dispTitle');
+    if (el) {
+        el.textContent = v;
+        el.classList.remove('changed');
+        void el.offsetWidth;
+        el.classList.add('changed');
+    }
+
+    closeModal('nameModal');
+    document.getElementById('nameIn').value = '';
+    showToast('&#10003; House name updated to "' + v + '"');
+});
+
+// ── SAVE PRICE ─────────────────────────────────────────────────────────────────
+document.getElementById('savePrice').addEventListener('click', function() {
+    var raw = document.getElementById('priceIn').value.trim();
+    if (!raw || isNaN(raw) || Number(raw) <= 0) {
+        alert('Please enter a valid price (numbers only).');
+        return;
+    }
+
+    // Format with commas
+    var formatted = parseInt(raw).toLocaleString('en-US');
+    H.price = formatted;
+    LG.update(H.id, {
+        price: formatted
+    });
+
+    // Update DOM immediately
+    var el = document.getElementById('dispPrice');
+    if (el) {
+        el.textContent = formatted + ' THB';
+        el.classList.remove('changed');
+        void el.offsetWidth;
+        el.classList.add('changed');
+    }
+
+    closeModal('priceModal');
+    document.getElementById('priceIn').value = '';
+    showToast('&#10003; Price updated to ' + formatted + ' THB');
+});
+
+// ── SAVE DESCRIPTION / INFO ────────────────────────────────────────────────────
+document.getElementById('saveDesc').addEventListener('click', function() {
+    var newDesc = document.getElementById('descIn').value.trim();
+    var newLoc = document.getElementById('locIn').value.trim();
+
+    if (!newDesc && !newLoc) {
+        alert('Please fill in at least one field.');
+        return;
+    }
+
+    var changed = [];
+
+    if (newDesc) {
+        H.desc = newDesc;
+        LG.update(H.id, {
+            desc: newDesc
+        });
+        var el = document.getElementById('dispDesc');
+        if (el) {
+            el.textContent = newDesc;
+            el.classList.remove('changed');
+            void el.offsetWidth;
+            el.classList.add('changed');
+        }
+        changed.push('description');
+    }
+    if (newLoc) {
+        H.location = newLoc;
+        LG.update(H.id, {
+            location: newLoc
+        });
+        var el2 = document.getElementById('dispLoc');
+        if (el2) {
+            el2.textContent = newLoc;
+            el2.classList.remove('changed');
+            void el2.offsetWidth;
+            el2.classList.add('changed');
+        }
+        changed.push('location');
+    }
+
+    closeModal('descModal');
+    showToast('&#10003; Updated: ' + changed.join(' & '));
+});
+
+// ── SAVE IMAGES ────────────────────────────────────────────────────────────────
+document.getElementById('saveImg').addEventListener('click', function() {
+    // Check if any file was actually selected
+    var anyUploaded = false;
+    for (var i = 0; i <= 3; i++) {
+        var f = document.getElementById('imgFile' + i);
+        if (f && f.files && f.files.length > 0) {
+            anyUploaded = true;
+            break;
+        }
+    }
+    if (!anyUploaded) {
+        alert('Please upload at least one image first.');
+        return;
+    }
+
+    LG.update(H.id, {
+        imgs: H.imgs,
+        card: H.imgs[0].replace('/900/600', '/400/300')
+    });
+    // Re-render thumbnails with new images
+    renderThumbs();
+    document.getElementById('mainImg').src = H.imgs[0];
+
+    closeModal('imgModal');
+    // Reset file inputs
+    for (var j = 0; j <= 3; j++) {
+        var fi = document.getElementById('imgFile' + j);
+        if (fi) fi.value = '';
+        var pv = document.getElementById('prev' + j);
+        if (pv) {
+            pv.src = '';
+            pv.style.display = 'none';
+        }
+    }
+    showToast('&#10003; Images updated successfully');
+});
+
+// ── FILE UPLOAD HELPERS ────────────────────────────────────────────────────────
+function triggerFile(id) {
+    document.getElementById(id).click();
+}
+
+// When file is chosen: show preview + update H.imgs
+['imgFile0', 'imgFile1', 'imgFile2', 'imgFile3'].forEach(function(fid, idx) {
+    document.getElementById(fid).addEventListener('change', function() {
+        var file = this.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var src = e.target.result;
+            // slot 0 = card/preview image = imgs[0], slots 1-3 = detail images 1-3
+            H.imgs[idx] = src;
+            // Show mini preview in modal
+            var pv = document.getElementById('prev' + idx);
+            if (pv) {
+                pv.src = src;
+                pv.style.display = 'block';
+            }
+            // Live update main view if it's slot 0
+            if (idx === 0) {
+                document.getElementById('mainImg').src = src;
+                renderThumbs();
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+});
+        </script>
+</body>
+</html>

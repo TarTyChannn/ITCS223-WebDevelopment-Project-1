@@ -94,7 +94,7 @@ function doLogout() {
     localStorage.removeItem('lgAdmin');
     sessionStorage.removeItem('lgAdminUser');
     localStorage.removeItem('lgAdminUser');
-    location.href = 'admin-login.html';
+    location.href = '/admin/login';
 }
 
 // COMMON UI UTILITIES
@@ -124,7 +124,7 @@ function updateNavAdmin() {
         var user = sessionStorage.getItem('lgAdminUser') || localStorage.getItem('lgAdminUser') || 'Admin';
         if (btn) {
             btn.textContent = 'Dashboard';
-            btn.onclick = function() { location.href = 'dashboard.html'; };
+            btn.onclick = function() { location.href = '/admin/dashboard'; };
         }
         if (ind) {
             ind.style.display = 'inline';
@@ -132,7 +132,7 @@ function updateNavAdmin() {
         }
     } else {
         if (btn) {
-            btn.onclick = function() { location.href = 'admin-login.html'; };
+            btn.onclick = function() { location.href = '/admin/login'; };
         }
         if (ind) {
             ind.style.display = 'none';

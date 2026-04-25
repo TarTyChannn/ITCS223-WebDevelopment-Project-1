@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Management — Long Gone Admin</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/html/common-admin-sidebar.css" />
+
+    <style>
+        /* MAIN CONTENT */
+        .main {
+            margin-left: 240px;
+            padding: 80px 32px 60px;
+            flex: 1;
+        }
+
+        .page-header { margin-bottom: 24px; }
+
+        .page-header h1 {
+            font-family: var(--font-display);
+            font-size: 26px;
+            color: #111;
+            letter-spacing: 2px;
+        }
+
+        /* STATS CARDS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+        }
+
+        .stat-label {
+            font-family: var(--font-display);
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .stat-val {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 600;
+            color: #111;
+        }
+
+        /* PROFILE DROPDOWN (top-right) */
+        .profile-menu { position: relative; }
+
+        .profile-trigger {
+            width: 40px;
+            height: 40px;
+            background: var(--dark);
+            border: 2px solid var(--blood);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            font-family: var(--font-display);
+            cursor: pointer;
+            transition: transform .15s, border-color .2s;
+            position: relative;
+        }
+
+        .profile-trigger:hover {
+            transform: scale(1.05);
+            border-color: var(--blood-light);
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            min-width: 220px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, .15);
+            overflow: hidden;
+            z-index: 100;
+            animation: dropDown .18s ease;
+        }
+
+        .profile-dropdown.show { display: block; }
+
+        @keyframes dropDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid #f0f0f0;
+            background: #fafafa;
+        }
+
+        .profile-header strong {
+            display: block;
+            color: #111;
+            font-family: var(--font-display);
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .profile-header span {
+            display: block;
+            color: #888;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px 18px;
+            border: none;
+            background: none;
+            text-align: left;
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            transition: background .15s;
+        }
+
+        .dropdown-item:hover { background: #f5f5f5; }
+
+        .dropdown-item.signout {
+            color: #c0392b;
+            border-top: 1px solid #f0f0f0;
+            font-weight: 600;
+        }
+
+        .dropdown-item.signout:hover { background: #fef0ef; }
+
+        .stat-sub {
+            font-size: 13px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        /* SEARCH ROW — Add New House button is now to the RIGHT of search */
+        .search-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            align-items: stretch;
+        }
+
+        .search-input {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px 16px;
+            font-family: var(--font-body);
+            font-size: 15px;
+            color: #333;
+            outline: none;
+        }
+
+        .search-btn {
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: var(--font-display);
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: background .2s;
+        }
+
+        .search-btn:hover { background: #111; }
+
+        /* "+ Add New House" — positioned to the right of search */
+        .add-btn {
+            background: var(--blood);
+            color: #fff;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-family: var(--font-display);
+            font-size: 13px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background .2s;
+            white-space: nowrap;
+        }
+
+        .add-btn:hover { background: var(--blood-light); }
+
+        /* DATA TABLE */
+        .table-wrap {
+            background: #fff;
+            border-radius: 10px;
+            overflow: auto;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        thead tr { background: #f8f8f8; }
+
+        th {
+            text-align: left;
+            padding: 13px 16px;
+            font-family: var(--font-display);
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #666;
+            font-weight: 600;
+            border-bottom: 1px solid #eee;
+        }
+
+        td {
+            padding: 13px 16px;
+            font-size: 14px;
+            color: #333;
+            border-top: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+
+        tr:hover td { background: #fafafa; }
+
+        .house-thumb-sm {
+            width: 58px;
+            height: 42px;
+            object-fit: cover;
+            border-radius: 5px;
+            filter: brightness(.75) contrast(1.1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-family: var(--font-display);
+            letter-spacing: .5px;
+        }
+
+        .badge-rent { background: #dbeafe; color: #1d4ed8; }
+        .badge-buy  { background: #dcfce7; color: #15803d; }
+
+        .action-btns { display: flex; gap: 7px; }
+
+        .btn-view, .btn-edit, .btn-delete {
+            border: none;
+            border-radius: 5px;
+            padding: 6px 13px;
+            font-size: 12px;
+            font-family: var(--font-display);
+            cursor: pointer;
+            transition: opacity .2s;
+        }
+
+        .btn-view   { background: #3b82f6; color: #fff; }
+        .btn-edit   { background: #f59e0b; color: #fff; }
+        .btn-delete { background: #ef4444; color: #fff; }
+
+        .btn-view:hover, .btn-edit:hover, .btn-delete:hover { opacity: .82; }
+
+        /* MODALS */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .45);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .overlay.show { display: flex; }
+
+        .modal {
+            background: #e8e8e8;
+            border-radius: 12px;
+            padding: 36px;
+            min-width: 360px;
+            max-width: 480px;
+            width: 90%;
+            animation: popIn .2s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(.95); opacity: 0; }
+            to   { transform: scale(1);   opacity: 1; }
+        }
+
+        .modal h2 {
+            font-family: var(--font-display);
+            font-size: 20px;
+            color: #111;
+            margin-bottom: 22px;
+        }
+
+        .mfield {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .mfield label {
+            font-size: 14px;
+            color: #333;
+            min-width: 100px;
+        }
+
+        .mfield input,
+        .mfield select {
+            flex: 1;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            font-family: var(--font-body);
+        }
+
+        .mactions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 12px;
+        }
+
+        .btn-cancel {
+            background: #888;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 24px;
+            font-family: var(--font-display);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .btn-confirm {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 24px;
+            font-family: var(--font-display);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .btn-del-confirm {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 24px;
+            font-family: var(--font-display);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .del-center { text-align: center; }
+        .del-center p { color: #555; margin: 8px 0 24px; font-size: 15px; }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #2e9e5e;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-family: var(--font-display);
+            font-size: 13px;
+            letter-spacing: 1px;
+            z-index: 999;
+            animation: slideUp .3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AUTH GUARD — runs immediately before page renders -->
+    <script src="/script.js"></script>
+    <script>
+        
+
+        
+        
+
+        if (!isAdmin()) location.href = '/admin/login';
+    </script>
+
+    <!-- SIDEBAR — Dashboard tab REMOVED, Product Management is default -->
+    <aside class="sidebar">
+        <div class="sidebar-brand" onclick="location.href='/'">Long Gone</div>
+        <nav class="sidebar-nav">
+            <!-- Only Product Management tab now, set as active by default -->
+            <a href="/admin/dashboard" class="active">Product Management</a>
+        </nav>
+    </aside>
+
+    <!-- ========================================================
+         TOP BAR — profile icon + dropdown menu (top-right)
+         (Duplicate "Product Management" title REMOVED)
+         ======================================================== -->
+    <header class="topbar">
+        <div class="topbar-spacer"></div>
+
+        <div class="profile-menu">
+            <button class="profile-trigger" id="profileTrigger" aria-label="Profile menu">
+                <span id="profileInitial">A</span>
+            </button>
+
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="profile-header">
+                    <strong id="dropdownUser">Admin</strong>
+                    <span>Administrator</span>
+                </div>
+                <button class="dropdown-item signout" onclick="doLogout()">
+                    &#10148; Sign Out
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <div class="page-header">
+            <h1>Product Management</h1>
+        </div>
+
+        <!-- Live stats -->
+        <section class="stats" id="statsRow"></section>
+
+        <!-- Search row — Add New House button is now placed to the RIGHT of search -->
+        <div class="search-row">
+            <input class="search-input" type="text" id="searchInput" placeholder="Search by name, ID, or location..." />
+            <button class="search-btn" id="searchBtn">Search</button>
+            <button class="add-btn" id="addBtn">+ Add New House</button>
+        </div>
+
+        <!-- Data table -->
+        <section class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>House Name</th>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>Price (THB)</th>
+                        <th>Location</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tBody"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- ADD-HOUSE MODAL -->
+    <div class="overlay" id="addModal">
+        <div class="modal">
+            <h2>Add New House</h2>
+            <div class="mfield"><label>House Name</label><input type="text" id="newName" placeholder="e.g. The Haunted Manor" /></div>
+            <div class="mfield"><label>House ID</label><input type="text" id="newId" placeholder="Unique ID number" /></div>
+            <div class="mfield"><label>Location</label><input type="text" id="newLoc" placeholder="City, Province" /></div>
+            <div class="mfield"><label>Price (THB)</label><input type="number" id="newPrice" placeholder="e.g. 500000" /></div>
+            <div class="mfield">
+                <label>Type</label>
+                <select id="newType">
+                    <option value="rent">For Rent</option>
+                    <option value="buy">For Sale</option>
+                </select>
+            </div>
+            <div class="mactions">
+                <button class="btn-cancel" id="cancelAdd">Cancel</button>
+                <button class="btn-confirm" id="confirmAdd">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL -->
+    <div class="overlay" id="deleteModal">
+        <div class="modal">
+            <div class="del-center">
+                <h2>Do you want to Delete?</h2>
+                <p id="delText">House ID: ?</p>
+                <div class="mactions">
+                    <button class="btn-cancel" id="cancelDel">Cancel</button>
+                    <button class="btn-del-confirm" id="confirmDel">Confirm Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHARED DATA STORE + PAGE LOGIC -->
+    <script>
+        
+
+        // PROFILE / TOPBAR — fill avatars + dropdown
+        const adminUser = getAdminUser();
+        document.getElementById('profileInitial').textContent = adminUser.charAt(0).toUpperCase();
+        document.getElementById('dropdownUser').textContent = adminUser;
+
+        // Toggle dropdown
+        const profileTrigger = document.getElementById('profileTrigger');
+        const profileDropdown = document.getElementById('profileDropdown');
+        profileTrigger.addEventListener('click', e => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('show');
+        });
+
+        // Click anywhere else closes dropdown
+        document.addEventListener('click', e => {
+            if (!profileDropdown.contains(e.target) && e.target !== profileTrigger) {
+                profileDropdown.classList.remove('show');
+            }
+        });
+
+        // HOUSE DATA + RENDER
+        var HOUSES = LG.getAll();
+
+        function renderStats() {
+            var total = HOUSES.length;
+            var buy = HOUSES.filter(function (h) { return h.type === 'buy'; }).length;
+            var rent = HOUSES.filter(function (h) { return h.type === 'rent'; }).length;
+            document.getElementById('statsRow').innerHTML =
+                '<div class="stat-card"><div class="stat-label">Total Listings</div><div class="stat-val">' + total + '</div><div class="stat-sub">Active properties</div></div>' +
+                '<div class="stat-card"><div class="stat-label">For Sale</div><div class="stat-val">' + buy + '</div><div class="stat-sub">Buy listings</div></div>' +
+                '<div class="stat-card"><div class="stat-label">For Rent</div><div class="stat-val">' + rent + '</div><div class="stat-sub">Rent listings</div></div>';
+        }
+
+        function renderTable(data) {
+            var tb = document.getElementById('tBody');
+            tb.innerHTML = '';
+            if (!data.length) {
+                tb.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#888;font-style:italic;">No results found.</td></tr>';
+                return;
+            }
+            data.forEach(function (h) {
+                var tr = document.createElement('tr');
+                tr.innerHTML =
+                    '<td><img class="house-thumb-sm" src="' + (h.card || 'https://picsum.photos/seed/house' + h.id + '/200/140') + '" alt=""/></td>' +
+                    '<td style="font-weight:600">' + h.name + '</td>' +
+                    '<td style="color:#888">' + h.id + '</td>' +
+                    '<td><span class="badge badge-' + h.type + '">' + (h.type === 'buy' ? 'Buy' : 'Rent') + '</span></td>' +
+                    '<td style="color:#8b0000;font-weight:600">' + h.price + ' THB</td>' +
+                    '<td style="color:#666">' + h.location + '</td>' +
+                    '<td style="color:#888">' + h.updated + '</td>' +
+                    '<td><div class="action-btns">' +
+                        '<button class="btn-view" onclick="location.href=\'/house?id=' + h.id + '\'">View</button>' +
+                        '<button class="btn-edit" onclick="location.href=\'/admin/edit?id=' + h.id + '\'">Edit</button>' +
+                        '<button class="btn-delete" onclick="openDel(' + h.id + ',\'' + h.name.replace(/'/g, "\\'") + '\')">Delete</button>' +
+                    '</div></td>';
+                tb.appendChild(tr);
+            });
+        }
+
+        // Initial render
+        renderStats();
+        renderTable(HOUSES);
+
+        // SEARCH
+        document.getElementById('searchBtn').addEventListener('click', function () {
+            var q = document.getElementById('searchInput').value.toLowerCase().trim();
+            renderTable(q
+                ? HOUSES.filter(function (h) { return h.name.toLowerCase().includes(q) || String(h.id).includes(q) || h.location.toLowerCase().includes(q); })
+                : HOUSES
+            );
+        });
+
+        document.getElementById('searchInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') document.getElementById('searchBtn').click();
+        });
+
+        // ADD MODAL
+        document.getElementById('addBtn').addEventListener('click', function () {
+            document.getElementById('addModal').classList.add('show');
+        });
+
+        document.getElementById('cancelAdd').addEventListener('click', function () {
+            document.getElementById('addModal').classList.remove('show');
+        });
+
+        document.getElementById('confirmAdd').addEventListener('click', function () {
+            var name = document.getElementById('newName').value.trim();
+            var id = document.getElementById('newId').value.trim();
+            var loc = document.getElementById('newLoc').value.trim();
+            var price = document.getElementById('newPrice').value.trim();
+            var type = document.getElementById('newType').value;
+
+            if (!name || !id) { alert('Please fill in House Name and House ID.'); return; }
+
+            // Add via shared store, then reload + re-render
+            LG.add({
+                id: parseInt(id) || null,
+                name: name,
+                type: type,
+                price: price ? parseInt(price).toLocaleString() : '0',
+                location: loc || '—',
+                city: loc ? loc.split(',')[0].trim() : '—',
+                area: loc || '—'
+            });
+            HOUSES = LG.getAll();
+            document.getElementById('addModal').classList.remove('show');
+
+            // Clear inputs
+            ['newName', 'newId', 'newLoc', 'newPrice'].forEach(function (fid) {
+                document.getElementById(fid).value = '';
+            });
+
+            renderStats();
+            renderTable(HOUSES);
+            showToast('House "' + name + '" added successfully!');
+        });
+
+        // DELETE MODAL
+        var delId = null;
+
+        function openDel(id, name) {
+            delId = id;
+            document.getElementById('delText').textContent = 'House ID: ' + id + ' — "' + name + '"';
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        document.getElementById('cancelDel').addEventListener('click', function () {
+            document.getElementById('deleteModal').classList.remove('show');
+        });
+
+        document.getElementById('confirmDel').addEventListener('click', function () {
+            LG.remove(delId);
+            HOUSES = LG.getAll();
+            document.getElementById('deleteModal').classList.remove('show');
+            renderStats();
+            renderTable(HOUSES);
+            showToast('House deleted.');
+        });
+
+        // Close modals on overlay click
+        ['addModal', 'deleteModal'].forEach(function (id) {
+            document.getElementById(id).addEventListener('click', function (e) {
+                if (e.target === this) this.classList.remove('show');
+            });
+        });
+
+        // TOAST
+        
+
+        // Show success toast on URL redirect
+        (function () {
+            var sp = new URLSearchParams(location.search);
+            var msg = sp.get('success') || sp.get('msg');
+            if (msg) showToast(decodeURIComponent(msg));
+        })();
+    </script>
+</body>
+</html>
