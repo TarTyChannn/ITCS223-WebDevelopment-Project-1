@@ -1,14 +1,8 @@
--- Create and select the database
--- Drop the database if it already exists to start fresh
 DROP DATABASE IF EXISTS long_gone_db;
 
 -- Create and select the database
 CREATE DATABASE long_gone_db;
 USE long_gone_db;
-
--- ============================================================
--- 1. HouseCategory (no dependencies)
--- ... (rest of the script remains exactly the same)
 
 -- 1. HouseCategory (no dependencies)
 CREATE TABLE HouseCategory (
@@ -33,13 +27,16 @@ CREATE TABLE Area (
 CREATE TABLE House (
     HouseID       CHAR(11)       NOT NULL,
     HouseName     VARCHAR(50)    NOT NULL,
-    HousePrice    DECIMAL(10,2)  NOT NULL CHECK (HousePrice >= 0),
     bedroomCount  INT            NOT NULL CHECK (bedroomCount  BETWEEN 0 AND 20),
     bathroomCount INT            NOT NULL CHECK (bathroomCount BETWEEN 0 AND 20),
     basementCount INT            NOT NULL CHECK (basementCount BETWEEN 0 AND 5),
     Description   VARCHAR(2000)  NULL,
-    HcategoryID   CHAR(8)        NOT NULL, -- FIXED: Was INT, now matches HouseCategory.categoryID
-    HAreaName     VARCHAR(50)    NOT NULL, -- FIXED: Was VARCHAR(100), now matches Area.AreaName
+    HcategoryID   CHAR(8)        NOT NULL,
+    HAreaName     VARCHAR(50)    NOT NULL, 
+    BuyingStatus  BOOLEAN		 NOT NULL,
+    RentingStatus BOOLEAN		 NOT NULL,
+    BuyingPrice	  DECIMAL(10,2)  NOT NULL,
+    RentingPrice  DECIMAL(10,2)  NOT NULL,
     CONSTRAINT PK_House PRIMARY KEY (HouseID),
     CONSTRAINT FK_House_HouseCategory FOREIGN KEY (HcategoryID)
         REFERENCES HouseCategory (categoryID),
@@ -52,7 +49,7 @@ CREATE TABLE Photo (
     PhotoID      CHAR(8)        NOT NULL CHECK (PhotoID > '0'),
     Pdescription VARCHAR(2000)  NULL,
     PhotoRef     VARCHAR(6000)  NOT NULL,
-    PHouseID     CHAR(11)       NOT NULL, -- FIXED: Was INT, now matches House.HouseID
+    PHouseID     CHAR(11)       NOT NULL, 
     CONSTRAINT PK_Photo PRIMARY KEY (PhotoID),
     CONSTRAINT FK_Photo_House FOREIGN KEY (PHouseID)
         REFERENCES House (HouseID)
@@ -107,7 +104,7 @@ CREATE TABLE HouseBroker (
 CREATE TABLE Rating (
     RCustomerID  CHAR(10)      NOT NULL,
     RHouseID     CHAR(11)      NOT NULL,
-    RatingValue  DECIMAL(3,2)  NOT NULL, -- FIXED: Was CHAR(11). Changed to DECIMAL so you can calculate AVG() in Node.js
+    RatingValue  DECIMAL(3,2)  NOT NULL, 
     Date         DATE          NOT NULL,
     CONSTRAINT PK_Rating PRIMARY KEY (RCustomerID, RHouseID),
     CONSTRAINT FK_Rating_Customer FOREIGN KEY (RCustomerID)
