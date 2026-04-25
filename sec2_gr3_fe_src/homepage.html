@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Long Gone — Haunted House Real Estate</title>
+
+    <!-- Google Fonts: Cinzel (display) + Crimson Text (body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ============================================================
+           GLOBAL RESET + ROOT VARIABLES
+           ============================================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --blood: #8b0000;
+            --blood-light: #b30000;
+            --dark: #111010;
+            --dark2: #1a1919;
+            --dark3: #222121;
+            --dark4: #2c2b2b;
+            --surface: #f4f2ee;
+            --text-muted: #888;
+            --text-light: #ccc;
+            --white: #fff;
+            --font-display: 'Cinzel', serif;
+            --font-body: 'Crimson Text', serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--dark);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ============================================================
+           NAVIGATION BAR
+           ============================================================ */
+        nav {
+            background: var(--dark);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            height: 56px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .nav-links { display: flex; gap: 28px; }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-family: var(--font-display);
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: color .2s;
+        }
+
+        .nav-links a:hover { color: var(--white); }
+
+        .nav-brand {
+            font-family: var(--font-display);
+            font-size: 22px;
+            letter-spacing: 4px;
+            color: var(--white);
+            text-decoration: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-right { display: flex; align-items: center; gap: 14px; }
+
+        .admin-btn {
+            background: var(--blood);
+            color: #fff;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 3px;
+            font-family: var(--font-display);
+            font-size: 12px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background .2s;
+        }
+
+        .admin-btn:hover { background: var(--blood-light); }
+
+        #adminIndicator {
+            display: none;
+            font-family: var(--font-display);
+            font-size: 11px;
+            color: #3ddc84;
+            letter-spacing: 1px;
+        }
+
+        /* ============================================================
+           HERO SECTION (with background image)
+           ============================================================ */
+        .hero {
+            position: relative;
+            min-height: 460px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 24px 70px;
+            overflow: hidden;
+            /* Layered: dark gradient overlay + haunted house background image */
+            background:
+                linear-gradient(rgba(10, 8, 8, 0.78), rgba(10, 8, 8, 0.88)),
+                url('https://images.unsplash.com/photo-1505873242700-f289a29e1e0f?w=1600&q=80') center/cover no-repeat;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 100%, rgba(139, 0, 0, .35) 0%, transparent 65%);
+            z-index: 0;
+        }
+
+        .drip {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hero-content { position: relative; z-index: 1; }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 72px;
+            font-weight: 600;
+            letter-spacing: 8px;
+            text-shadow: 0 4px 32px rgba(139, 0, 0, .8), 0 2px 8px rgba(0, 0, 0, .9);
+            margin-bottom: 14px;
+            animation: fadeUp .8s ease both;
+        }
+
+        .hero p {
+            font-style: italic;
+            font-size: 19px;
+            color: #ddd;
+            margin-bottom: 36px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, .8);
+            animation: fadeUp .8s .12s ease both;
+        }
+
+        .search-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 14px;
+            animation: fadeUp .8s .2s ease both;
+        }
+
+        .fg { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+
+        .fl {
+            font-family: var(--font-display);
+            font-size: 11px;
+            color: #ddd;
+            letter-spacing: 1px;
+        }
+
+        .filter-select, .filter-input {
+            background: rgba(255, 255, 255, .95);
+            border: none;
+            border-radius: 3px;
+            padding: 9px 14px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            min-width: 100px;
+        }
+
+        .filter-input { min-width: 200px; }
+
+        .search-row { animation: fadeUp .8s .28s ease both; }
+
+        .search-btn {
+            background: var(--blood);
+            border: none;
+            padding: 11px 30px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 14px;
+            font-family: var(--font-display);
+            letter-spacing: 1px;
+            border-radius: 3px;
+            transition: background .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-btn:hover { background: var(--blood-light); }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           FEATURED HAUNTED HOUSE — CAROUSEL
+           ============================================================ */
+        .featured-wrapper {
+            background: var(--dark2);
+            padding: 56px 32px 60px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--white);
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        /* Carousel container holds the slides + nav buttons */
+        .carousel {
+            position: relative;
+            max-width: 1100px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform .55s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        /* Each slide is one "card" (showing 1 large featured house at a time on mobile,
+           or up to 3 wider cards on desktop via flex-basis) */
+        .carousel-slide {
+            min-width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            padding: 4px;
+        }
+
+        .feature-card {
+            background: var(--dark3);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #333;
+            cursor: pointer;
+            transition: transform .25s, border-color .25s, box-shadow .25s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--blood);
+            box-shadow: 0 12px 32px rgba(139, 0, 0, .25);
+        }
+
+        .feature-thumb {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            filter: brightness(.7) contrast(1.15) saturate(.55);
+            transition: filter .3s;
+            background: #1a1919;
+        }
+
+        .feature-card:hover .feature-thumb {
+            filter: brightness(.85) contrast(1.1) saturate(.7);
+        }
+
+        .feature-info { padding: 16px 18px 18px; }
+
+        .feature-city {
+            font-family: var(--font-display);
+            font-size: 15px;
+            color: #fff;
+            letter-spacing: 1.5px;
+            margin-bottom: 4px;
+        }
+
+        .feature-area {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .feature-price {
+            font-size: 15px;
+            color: var(--blood-light);
+            font-weight: 600;
+            font-family: var(--font-display);
+        }
+
+        /* Carousel navigation arrows */
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(139, 0, 0, .85);
+            color: #fff;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 22px;
+            font-family: var(--font-display);
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s;
+        }
+
+        .carousel-nav:hover { background: var(--blood-light); }
+        .carousel-prev { left: 12px; }
+        .carousel-next { right: 12px; }
+
+        /* Dot indicators */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #444;
+            cursor: pointer;
+            transition: background .2s, transform .2s;
+        }
+
+        .dot.active {
+            background: var(--blood-light);
+            transform: scale(1.3);
+        }
+
+        /* ============================================================
+           WHY LONG GONE? section — taller cards, better spacing
+           ============================================================ */
+        .why-wrapper {
+            background: var(--surface);
+            padding: 64px 32px 72px;
+        }
+
+        .why-wrapper .section-title { color: #1a1a1a; }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .why-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 56px 32px 48px;
+            text-align: center;
+            min-height: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            transition: transform .25s, box-shadow .25s, border-color .25s;
+        }
+
+        .why-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(139, 0, 0, .15);
+            border-color: var(--blood);
+        }
+
+        .why-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(139, 0, 0, .08);
+            border-radius: 50%;
+            padding: 12px;
+        }
+
+        .why-card h3 {
+            font-family: var(--font-display);
+            font-size: 17px;
+            color: #111;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .why-card p {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            background: var(--dark);
+            border-top: 1px solid #2a2a2a;
+            text-align: center;
+            padding: 28px;
+            font-family: var(--font-display);
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: #555;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 900px) {
+            .carousel-slide { grid-template-columns: repeat(2, 1fr); }
+            .why-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            nav { padding: 0 16px; }
+            .hero h1 { font-size: 42px; letter-spacing: 4px; }
+            .carousel-slide { grid-template-columns: 1fr; }
+            .why-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================================
+         NAVIGATION BAR (sitemap link to all pages)
+         ======================================================== -->
+    <header>
+        <nav>
+            <div class="nav-links">
+                <a href="buy.html">Buy</a>
+                <a href="rent.html">Rent</a>
+                <a href="team.html">Our Team</a>
+            </div>
+            <a class="nav-brand" href="homepage.html">Long Gone</a>
+            <div class="nav-right">
+                <span id="adminIndicator">&#128274; Admin</span>
+                <button class="admin-btn" id="adminBtn">&#128274; Admin</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ========================================================
+         HERO SECTION (with background image + search filters)
+         ======================================================== -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+
+        <!-- Decorative blood-drip SVG -->
+        <div class="drip">
+            <svg width="120" height="70" viewBox="0 0 120 70" xmlns="http://www.w3.org/2000/svg">
+                <rect x="52" y="0" width="16" height="42" fill="#8b0000" />
+                <ellipse cx="60" cy="42" rx="9" ry="12" fill="#8b0000" />
+                <rect x="18" y="0" width="10" height="28" fill="#8b0000" />
+                <ellipse cx="23" cy="28" rx="6.5" ry="9" fill="#8b0000" />
+                <rect x="92" y="0" width="10" height="20" fill="#8b0000" />
+                <ellipse cx="97" cy="20" rx="6.5" ry="9" fill="#8b0000" />
+                <rect x="3" y="0" width="7" height="14" fill="#8b0000" />
+                <ellipse cx="6.5" cy="14" rx="5" ry="7" fill="#8b0000" />
+                <rect x="110" y="0" width="7" height="10" fill="#8b0000" />
+                <ellipse cx="113.5" cy="10" rx="5" ry="7" fill="#8b0000" />
+            </svg>
+        </div>
+
+        <div class="hero-content">
+            <h1>Long Gone</h1>
+            <p>Want to live in a haunted house? Find here</p>
+
+            <!-- Three search criteria: intent (buy/rent), category, rating + location -->
+            <div class="search-filters">
+                <div class="fg">
+                    <span class="fl">I want to</span>
+                    <select class="filter-select" id="intentF">
+                        <option value="buy">Buy</option>
+                        <option value="rent">Rent</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <span class="fl">Category</span>
+                    <select class="filter-select" id="catF">
+                        <option value="all">All</option>
+                        <option value="mansion">Mansion</option>
+                        <option value="cottage">Cottage</option>
+                        <option value="villa">Villa</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <span class="fl">Rating</span>
+                    <select class="filter-select" id="rateF">
+                        <option value="0">Any</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <span class="fl">Location</span>
+                    <input class="filter-input" type="text" id="locF" placeholder="Address..." />
+                </div>
+            </div>
+
+            <div class="search-row">
+                <button class="search-btn" id="searchBtn">&#128269; Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================================
+         FEATURED HAUNTED HOUSE — CAROUSEL (3-4 images)
+         ======================================================== -->
+    <section class="featured-wrapper">
+        <h2 class="section-title">Featured Haunted House</h2>
+
+        <div class="carousel" id="carousel">
+            <button class="carousel-nav carousel-prev" id="prevBtn" aria-label="Previous">&#10094;</button>
+            <div class="carousel-track" id="carouselTrack"></div>
+            <button class="carousel-nav carousel-next" id="nextBtn" aria-label="Next">&#10095;</button>
+        </div>
+
+        <div class="carousel-dots" id="carouselDots"></div>
+    </section>
+
+    <!-- ========================================================
+         WHY LONG GONE? — taller cards, better spacing
+         ======================================================== -->
+    <section class="why-wrapper">
+        <h2 class="section-title">Why Long Gone?</h2>
+        <div class="why-grid">
+
+            <article class="why-card">
+                <div class="why-icon">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                        <path d="M24 6L42 20V42H30V30H18V42H6V20L24 6Z" fill="#8b0000" />
+                    </svg>
+                </div>
+                <h3>Verified Properties</h3>
+                <p>Exclusive access to the most spectacularly haunted properties across Thailand, verified by our team of paranormal experts who personally investigate every listing.</p>
+            </article>
+
+            <article class="why-card">
+                <div class="why-icon">
+                    <svg width="40" height="48" viewBox="0 0 40 48" fill="none">
+                        <ellipse cx="20" cy="28" rx="16" ry="18" fill="#8b0000" />
+                        <rect x="8" y="8" width="9" height="16" rx="4.5" fill="#8b0000" />
+                        <rect x="23" y="8" width="9" height="16" rx="4.5" fill="#8b0000" />
+                        <circle cx="14" cy="29" r="3.5" fill="#f4f2ee" />
+                        <circle cx="26" cy="29" r="3.5" fill="#f4f2ee" />
+                        <path d="M15 36 Q20 40 25 36" stroke="#f4f2ee" stroke-width="1.5" fill="none" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <h3>Spirit Rating System</h3>
+                <p>Our trademark spirit rating system gives you an honest, transparent assessment of paranormal activity at every property — so you know exactly what (or who) you're getting into.</p>
+            </article>
+
+            <article class="why-card">
+                <div class="why-icon">
+                    <svg width="38" height="48" viewBox="0 0 38 48" fill="none">
+                        <path d="M19 2C9 2 2 10.5 2 19.5C2 30 19 46 19 46C19 46 36 30 36 19.5C36 10.5 29 2 19 2Z" fill="#8b0000" />
+                        <circle cx="19" cy="20" r="6" fill="#f4f2ee" />
+                    </svg>
+                </div>
+                <h3>Nationwide Coverage</h3>
+                <p>Properties across every province in Thailand. From misty northern highlands to sun-drenched southern islands — wherever the spirits roam, we have a haunted listing for you.</p>
+            </article>
+
+        </div>
+    </section>
+
+    <footer>&copy; 2024 Long Gone &mdash; All Spirits Reserved</footer>
+
+    <!-- ========================================================
+         SHARED DATA STORE (localStorage persistence)
+         ======================================================== -->
+    <script>
+        // ═══════════════════════════════════════════════════════════════
+        //  LONG GONE — SHARED DATA STORE  (localStorage persistence)
+        //  This module is included on every page so all pages share the
+        //  same canonical list of houses. CRUD operations happen here.
+        // ═══════════════════════════════════════════════════════════════
+        var LG = (function () {
+            var KEY = 'lgHouses';
+
+            // Initial seed data — at least 10 records as required by Phase II
+            var DEFAULTS = [
+                { id: 67, name: "Haunted House in the Middle of Salaya", city: "Bangkok", area: "Salaya, Nakhon Pathom", location: "Salaya, Phutthamonthon, Nakhon Pathom, 73170", price: "500,000", type: "rent", rating: 4, bedrooms: 1, bathrooms: 1, basement: 1, updated: "16/2/2026", email: "haunted67@longgone.th", phone: "014-254-785", desc: "A historic Victorian-era estate nestled deep within misty Salaya forests.", card: "https://picsum.photos/seed/ghost1/400/300", imgs: ["https://picsum.photos/seed/ghost1/900/600", "https://picsum.photos/seed/dark7/900/600", "https://picsum.photos/seed/manor1/900/600"] },
+                { id: 68, name: "Old Victorian Manor", city: "Bangkok", area: "Nongkhok, 10530", location: "Nongkhok, Min Buri, Bangkok, 10530", price: "800,000", type: "buy", rating: 5, bedrooms: 3, bathrooms: 2, basement: 1, updated: "10/3/2026", email: "manor68@longgone.th", phone: "012-345-678", desc: "Grand Victorian manor with original stained glass and ornate plasterwork.", card: "https://picsum.photos/seed/manor2/400/300", imgs: ["https://picsum.photos/seed/manor2/900/600", "https://picsum.photos/seed/ghost4/900/600", "https://picsum.photos/seed/dark3/900/600"] },
+                { id: 69, name: "The Whisper House", city: "Chiang Mai", area: "Chiang Mai, 50000", location: "Mueang, Chiang Mai, 50000", price: "300,000", type: "rent", rating: 3, bedrooms: 2, bathrooms: 1, basement: 0, updated: "5/4/2026", email: "whisper69@longgone.th", phone: "053-123-456", desc: "A quaint wooden cottage known for strange whispering sounds.", card: "https://picsum.photos/seed/spooky3/400/300", imgs: ["https://picsum.photos/seed/spooky3/900/600", "https://picsum.photos/seed/ghost5/900/600", "https://picsum.photos/seed/manor3/900/600"] },
+                { id: 70, name: "The Crow Estate", city: "Bangkok", area: "Nongkhok, 10530", location: "Nongkhok, Min Buri, Bangkok, 10530", price: "650,000", type: "buy", rating: 4, bedrooms: 2, bathrooms: 2, basement: 1, updated: "2/4/2026", email: "crow70@longgone.th", phone: "014-789-012", desc: "A secluded estate shrouded in century-old banyan trees.", card: "https://picsum.photos/seed/dark4/400/300", imgs: ["https://picsum.photos/seed/dark4/900/600", "https://picsum.photos/seed/spooky6/900/600", "https://picsum.photos/seed/ghost1/900/600"] },
+                { id: 71, name: "The Mist Manor", city: "Chiang Rai", area: "Chiang Rai, 57000", location: "Mueang, Chiang Rai, 57000", price: "420,000", type: "rent", rating: 5, bedrooms: 2, bathrooms: 1, basement: 0, updated: "1/4/2026", email: "mist71@longgone.th", phone: "053-987-654", desc: "Perched on a hillside forever shrouded in morning mist.", card: "https://picsum.photos/seed/manor5/400/300", imgs: ["https://picsum.photos/seed/manor5/900/600", "https://picsum.photos/seed/dark2/900/600", "https://picsum.photos/seed/ghost3/900/600"] },
+                { id: 72, name: "Shadowfall Cottage", city: "Phuket", area: "Kathu, Phuket", location: "Kathu, Phuket, 83120", price: "350,000", type: "rent", rating: 4, bedrooms: 1, bathrooms: 1, basement: 1, updated: "28/3/2026", email: "shadow72@longgone.th", phone: "076-123-456", desc: "A colonial-era bungalow hidden among rubber trees.", card: "https://picsum.photos/seed/ghost6/400/300", imgs: ["https://picsum.photos/seed/ghost6/900/600", "https://picsum.photos/seed/manor4/900/600", "https://picsum.photos/seed/spooky2/900/600"] },
+                { id: 73, name: "The Hollow Keep", city: "Ayutthaya", area: "Ayutthaya, 13000", location: "Phra Nakhon Si Ayutthaya, Ayutthaya, 13000", price: "750,000", type: "buy", rating: 5, bedrooms: 4, bathrooms: 3, basement: 2, updated: "15/3/2026", email: "hollow73@longgone.th", phone: "035-123-456", desc: "Built on ruins of a 17th century fort.", card: "https://picsum.photos/seed/dark7/400/300", imgs: ["https://picsum.photos/seed/dark7/900/600", "https://picsum.photos/seed/ghost2/900/600", "https://picsum.photos/seed/manor6/900/600"] },
+                { id: 74, name: "Widow's Peak House", city: "Chiang Mai", area: "Doi Saket, Chiang Mai", location: "Doi Saket, Chiang Mai, 50220", price: "280,000", type: "rent", rating: 3, bedrooms: 2, bathrooms: 1, basement: 0, updated: "10/3/2026", email: "widow74@longgone.th", phone: "053-456-789", desc: "Perched atop a rocky hill.", card: "https://picsum.photos/seed/spooky8/400/300", imgs: ["https://picsum.photos/seed/spooky8/900/600", "https://picsum.photos/seed/manor7/900/600", "https://picsum.photos/seed/dark5/900/600"] }
+            ];
+
+            // Load all houses (initialise with defaults if empty)
+            function load() {
+                try {
+                    var r = localStorage.getItem(KEY);
+                    if (r) return JSON.parse(r);
+                } catch (e) {}
+                save(DEFAULTS);
+                return JSON.parse(JSON.stringify(DEFAULTS));
+            }
+
+            function save(arr) {
+                try { localStorage.setItem(KEY, JSON.stringify(arr)); } catch (e) {}
+            }
+
+            function today() {
+                var d = new Date();
+                return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+            }
+
+            function getAll() { return load(); }
+
+            function getById(id) {
+                return load().find(function (h) { return h.id === parseInt(id); }) || null;
+            }
+
+            function update(id, patch) {
+                var arr = load();
+                var i = arr.findIndex(function (h) { return h.id === parseInt(id); });
+                if (i === -1) return false;
+                Object.keys(patch).forEach(function (k) { arr[i][k] = patch[k]; });
+                arr[i].updated = today();
+                save(arr);
+                return true;
+            }
+
+            function add(house) {
+                var arr = load();
+                var maxId = arr.reduce(function (m, h) { return Math.max(m, h.id); }, 0);
+                house.id = (house.id && !arr.find(function (h) { return h.id === parseInt(house.id); })) ? parseInt(house.id) : maxId + 1;
+                house.updated = today();
+                house.card = house.card || 'https://picsum.photos/seed/new' + house.id + '/400/300';
+                house.imgs = house.imgs || [
+                    'https://picsum.photos/seed/new' + house.id + '/900/600',
+                    'https://picsum.photos/seed/new' + house.id + 'b/900/600',
+                    'https://picsum.photos/seed/new' + house.id + 'c/900/600'
+                ];
+                house.rating = house.rating || 3;
+                house.bedrooms = house.bedrooms || 1;
+                house.bathrooms = house.bathrooms || 1;
+                house.basement = house.basement || 0;
+                house.email = house.email || 'info@longgone.th';
+                house.phone = house.phone || '—';
+                house.desc = house.desc || 'A mysterious haunted property awaiting its next resident.';
+                arr.push(house);
+                save(arr);
+                return house;
+            }
+
+            function remove(id) {
+                save(load().filter(function (h) { return h.id !== parseInt(id); }));
+            }
+
+            function reset() { localStorage.removeItem(KEY); }
+
+            return { getAll: getAll, getById: getById, update: update, add: add, remove: remove, reset: reset };
+        })();
+
+        // ═══════════════════════════════════════════════════════════════
+        //  ADMIN SESSION — keep navigation in sync
+        // ═══════════════════════════════════════════════════════════════
+        function isAdmin() {
+            if (localStorage.getItem('lgAdmin') === 'true') {
+                sessionStorage.setItem('lgAdmin', 'true');
+                sessionStorage.setItem('lgAdminUser', localStorage.getItem('lgAdminUser') || 'Admin');
+            }
+            return sessionStorage.getItem('lgAdmin') === 'true';
+        }
+
+        function updateNavAdmin() {
+            const btn = document.getElementById('adminBtn');
+            const ind = document.getElementById('adminIndicator');
+            if (isAdmin()) {
+                const user = sessionStorage.getItem('lgAdminUser') || localStorage.getItem('lgAdminUser') || 'Admin';
+                btn.textContent = 'Dashboard';
+                btn.onclick = () => location.href = 'dashboard.html';
+                ind.style.display = 'inline';
+                ind.innerHTML = '&#128274; ' + user;
+            } else {
+                btn.onclick = () => location.href = 'admin-login.html';
+            }
+        }
+        updateNavAdmin();
+
+        // ═══════════════════════════════════════════════════════════════
+        //  CAROUSEL — Featured Haunted Houses
+        //  Shows top-rated houses (rating 4+) in groups of 3 per slide.
+        // ═══════════════════════════════════════════════════════════════
+        const allHouses = LG.getAll();
+        // Sort by rating desc and take top 6 to make 2 slides of 3
+        const featured = allHouses.slice().sort((a, b) => b.rating - a.rating).slice(0, 6);
+        const track = document.getElementById('carouselTrack');
+        const dotsContainer = document.getElementById('carouselDots');
+
+        // Group every 3 cards into one slide
+        const slidesPerView = 3;
+        const slideCount = Math.ceil(featured.length / slidesPerView);
+
+        for (let s = 0; s < slideCount; s++) {
+            const slide = document.createElement('div');
+            slide.className = 'carousel-slide';
+            const sliceItems = featured.slice(s * slidesPerView, (s + 1) * slidesPerView);
+            sliceItems.forEach(h => {
+                const card = document.createElement('div');
+                card.className = 'feature-card';
+                card.innerHTML =
+                    '<img class="feature-thumb" src="' + h.card + '" alt="' + h.name + '" loading="lazy"/>' +
+                    '<div class="feature-info">' +
+                        '<div class="feature-city">' + h.city + '</div>' +
+                        '<div class="feature-area">' + h.area + '</div>' +
+                        '<div class="feature-price">' + h.price + ' THB</div>' +
+                    '</div>';
+                card.addEventListener('click', () => location.href = 'house-detail.html?id=' + h.id);
+                slide.appendChild(card);
+            });
+            track.appendChild(slide);
+
+            // Dot indicator
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (s === 0 ? ' active' : '');
+            dot.dataset.idx = s;
+            dot.onclick = () => goToSlide(s);
+            dotsContainer.appendChild(dot);
+        }
+
+        let currentSlide = 0;
+
+        function goToSlide(idx) {
+            currentSlide = (idx + slideCount) % slideCount;
+            track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+            document.querySelectorAll('.dot').forEach((d, i) => {
+                d.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', () => goToSlide(currentSlide - 1));
+        document.getElementById('nextBtn').addEventListener('click', () => goToSlide(currentSlide + 1));
+
+        // Auto-rotate every 5 seconds
+        let autoTimer = setInterval(() => goToSlide(currentSlide + 1), 5000);
+        // Pause auto-rotation on hover
+        document.getElementById('carousel').addEventListener('mouseenter', () => clearInterval(autoTimer));
+        document.getElementById('carousel').addEventListener('mouseleave', () => {
+            autoTimer = setInterval(() => goToSlide(currentSlide + 1), 5000);
+        });
+
+        // ═══════════════════════════════════════════════════════════════
+        //  HERO SEARCH — pass criteria as URL query string
+        // ═══════════════════════════════════════════════════════════════
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            const p = new URLSearchParams({
+                intent: document.getElementById('intentF').value,
+                category: document.getElementById('catF').value,
+                rating: document.getElementById('rateF').value,
+                location: document.getElementById('locF').value.trim()
+            });
+            location.href = 'search-result.html?' + p;
+        });
+
+        // Allow Enter key to trigger search
+        document.getElementById('locF').addEventListener('keydown', e => {
+            if (e.key === 'Enter') document.getElementById('searchBtn').click();
+        });
+    </script>
+</body>
+</html>
