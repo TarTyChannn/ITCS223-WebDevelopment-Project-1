@@ -7,26 +7,12 @@
 <link rel="stylesheet" href="common-form-modal.css"/>
 </head>
 <body>
-<script>
-function isAdmin() {
-    if (localStorage.getItem('lgAdmin') === 'true') {
-        sessionStorage.setItem('lgAdmin', 'true');
-        sessionStorage.setItem('lgAdminUser', localStorage.getItem('lgAdminUser') || 'Admin');
-    }
-    return sessionStorage.getItem('lgAdmin') === 'true';
-}
+<script src="script.js"></script>
+    <script>
 
-function getAdminUser() {
-    return sessionStorage.getItem('lgAdminUser') || localStorage.getItem('lgAdminUser') || 'Admin';
-}
 
-function doLogout() {
-    sessionStorage.removeItem('lgAdmin');
-    localStorage.removeItem('lgAdmin');
-    sessionStorage.removeItem('lgAdminUser');
-    localStorage.removeItem('lgAdminUser');
-    location.href = 'admin-login.html';
-}
+
+
 if (!isAdmin()) {
     location.href = 'admin-login.html';
 }

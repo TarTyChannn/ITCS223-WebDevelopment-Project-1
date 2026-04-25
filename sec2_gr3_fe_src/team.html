@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Our Team — Long Gone</title>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="common-public-nav.css" />
 
     <style>
@@ -63,7 +66,9 @@
             display: block;
         }
 
-        .member-info { padding: 18px 20px 22px; }
+        .member-info {
+            padding: 18px 20px 22px;
+        }
 
         .member-name {
             font-family: var(--font-display);
@@ -99,14 +104,23 @@
             margin-top: 48px;
         }
 
+        .resize-img {
+            width: 415px;
+            height: 400px;
+            object-fit: cover;
+        }
+
         /* ============================================================
            RESPONSIVE
            ============================================================ */
         @media (max-width: 620px) {
-            .team-grid { grid-template-columns: 1fr; }
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- ========================================================
@@ -136,7 +150,8 @@
         <section class="team-grid">
 
             <article class="member-card">
-                <img class="member-img" src="https://picsum.photos/seed/person1/500/400" alt="Adisorn Vechkultumrong" />
+                <img class="member-img resize-img" src="/sec2_gr3_fe_src/images/Adisorn.jpg"
+                    alt="Adisorn Vechkultumrong" />
                 <div class="member-info">
                     <div class="member-name">Adisorn Vechkultumrong</div>
                     <div class="member-id">6788142</div>
@@ -145,7 +160,7 @@
             </article>
 
             <article class="member-card">
-                <img class="member-img" src="https://picsum.photos/seed/person2/500/400" alt="Rachen Chaothai" />
+                <img class="member-img resize-img" src="/sec2_gr3_fe_src/images/Rachen.jpg" alt="Rachen Chaothai" />
                 <div class="member-info">
                     <div class="member-name">Rachen Chaothai</div>
                     <div class="member-id">6788186</div>
@@ -154,7 +169,8 @@
             </article>
 
             <article class="member-card">
-                <img class="member-img" src="https://picsum.photos/seed/person3/500/400" alt="Chavanon Opaspakkthon" />
+                <img class="member-img resize-img" src="/sec2_gr3_fe_src/images/Chavanon.png"
+                    alt="Chavanon Opaspakkthon" />
                 <div class="member-info">
                     <div class="member-name">Chavanon Opaspakkthon</div>
                     <div class="member-id">6788202</div>
@@ -163,7 +179,8 @@
             </article>
 
             <article class="member-card">
-                <img class="member-img" src="https://picsum.photos/seed/person4/500/400" alt="Chindanai Panitponkang" />
+                <img class="member-img resize-img" src="/sec2_gr3_fe_src/images/Chindanai.jpg"
+                    alt="Chindanai Panitponkang" />
                 <div class="member-info">
                     <div class="member-name">Chindanai Panitponkang</div>
                     <div class="member-id">6788203</div>
@@ -176,28 +193,8 @@
 
     <footer>&copy; 2024 Long Gone &mdash; All Spirits Reserved</footer>
 
-    <script>
-        // ═══════════════════════════════════════════════════════════════
-        //  ADMIN SESSION — keep nav button in sync
-        // ═══════════════════════════════════════════════════════════════
-        function isAdmin() {
-            if (localStorage.getItem('lgAdmin') === 'true') {
-                sessionStorage.setItem('lgAdmin', 'true');
-                sessionStorage.setItem('lgAdminUser', localStorage.getItem('lgAdminUser') || 'Admin');
-            }
-            return sessionStorage.getItem('lgAdmin') === 'true';
-        }
+    <script src="script.js"></script>
 
-        (function () {
-            var b = document.getElementById('adminBtn');
-            if (!b) return;
-            if (isAdmin()) {
-                b.textContent = 'Dashboard';
-                b.onclick = function () { location.href = 'dashboard.html'; };
-            } else {
-                b.onclick = function () { location.href = 'admin-login.html'; };
-            }
-        })();
-    </script>
 </body>
+
 </html>

@@ -3,7 +3,9 @@
    Used by: homepage, buy, rent, house-detail, search-result, team
    ============================================================ */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;

@@ -175,40 +175,14 @@
   </div>
 </div>
 <footer>&copy; 2024 Long Gone &mdash; All Spirits Reserved</footer>
-<script>
-function isAdmin() {
-    if (localStorage.getItem('lgAdmin') === 'true') {
-        sessionStorage.setItem('lgAdmin', 'true');
-        sessionStorage.setItem('lgAdminUser', localStorage.getItem('lgAdminUser') || 'Admin');
-    }
-    return sessionStorage.getItem('lgAdmin') === 'true';
-}
+<script src="script.js"></script>
+    <script>
 
-function getAdminUser() {
-    return sessionStorage.getItem('lgAdminUser') || localStorage.getItem('lgAdminUser') || 'Admin';
-}
 
-function doLogout() {
-    sessionStorage.removeItem('lgAdmin');
-    localStorage.removeItem('lgAdmin');
-    sessionStorage.removeItem('lgAdminUser');
-    localStorage.removeItem('lgAdminUser');
-    location.href = 'admin-login.html';
-}
+
+
 // Update nav admin button
-(function() {
-    var b = document.getElementById('adminBtn');
-    if (isAdmin()) {
-        b.textContent = 'Dashboard';
-        b.onclick = function() {
-            location.href = 'dashboard.html'
-        };
-    } else {
-        b.onclick = function() {
-            location.href = 'admin-login.html';
-        };
-    }
-})();
+
 
 var HOUSES = [{
     id: 67,
