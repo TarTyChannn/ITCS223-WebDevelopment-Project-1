@@ -120,9 +120,7 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ============================================================
-           FEATURED HAUNTED HOUSE — CAROUSEL
-           ============================================================ */
+        /* FEATURED HAUNTED HOUSE — CAROUSEL */
         .featured-wrapper {
             background: var(--dark2);
             padding: 56px 32px 60px;
@@ -261,9 +259,7 @@
             transform: scale(1.3);
         }
 
-        /* ============================================================
-           WHY LONG GONE? section — taller cards, better spacing
-           ============================================================ */
+        /* WHY LONG GONE? section — taller cards, better spacing */
         .why-wrapper {
             background: var(--surface);
             padding: 64px 32px 72px;
@@ -325,9 +321,7 @@
             line-height: 1.8;
         }
 
-        /* ============================================================
-           FOOTER
-           ============================================================ */
+        /* FOOTER */
         footer {
             background: var(--dark);
             border-top: 1px solid #2a2a2a;
@@ -339,9 +333,7 @@
             color: #555;
         }
 
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
+        /* RESPONSIVE */
         @media (max-width: 900px) {
             .carousel-slide { grid-template-columns: repeat(2, 1fr); }
             .why-grid { grid-template-columns: 1fr 1fr; }
@@ -357,9 +349,7 @@
 </head>
 <body>
 
-    <!-- ========================================================
-         NAVIGATION BAR (sitemap link to all pages)
-         ======================================================== -->
+    <!-- NAVIGATION BAR (sitemap link to all pages) -->
     <header>
         <nav>
             <div class="nav-links">
@@ -375,9 +365,7 @@
         </nav>
     </header>
 
-    <!-- ========================================================
-         HERO SECTION (with background image + search filters)
-         ======================================================== -->
+    <!-- HERO SECTION (with background image + search filters) -->
     <section class="hero">
         <div class="hero-bg"></div>
 
@@ -440,9 +428,7 @@
         </div>
     </section>
 
-    <!-- ========================================================
-         FEATURED HAUNTED HOUSE — CAROUSEL (3-4 images)
-         ======================================================== -->
+    <!-- FEATURED HAUNTED HOUSE — CAROUSEL (3-4 images) -->
     <section class="featured-wrapper">
         <h2 class="section-title">Featured Haunted House</h2>
 
@@ -455,9 +441,7 @@
         <div class="carousel-dots" id="carouselDots"></div>
     </section>
 
-    <!-- ========================================================
-         WHY LONG GONE? — taller cards, better spacing
-         ======================================================== -->
+    <!-- WHY LONG GONE? — taller cards, better spacing -->
     <section class="why-wrapper">
         <h2 class="section-title">Why Long Gone?</h2>
         <div class="why-grid">
@@ -503,9 +487,7 @@
 
     <footer>&copy; 2024 Long Gone &mdash; All Spirits Reserved</footer>
 
-    <!-- ========================================================
-         SHARED DATA STORE (localStorage persistence)
-         ======================================================== -->
+    <!-- SHARED DATA STORE (localStorage persistence) -->
     <script src="script.js"></script>
     <script>
         
@@ -515,10 +497,8 @@
         
         
 
-        // ═══════════════════════════════════════════════════════════════
         //  CAROUSEL — Featured Haunted Houses
         //  Shows top-rated houses (rating 4+) in groups of 3 per slide.
-        // ═══════════════════════════════════════════════════════════════
         const allHouses = LG.getAll();
         // Sort by rating desc and take top 6 to make 2 slides of 3
         const featured = allHouses.slice().sort((a, b) => b.rating - a.rating).slice(0, 6);
@@ -577,9 +557,7 @@
             autoTimer = setInterval(() => goToSlide(currentSlide + 1), 5000);
         });
 
-        // ═══════════════════════════════════════════════════════════════
-        //  HERO SEARCH — pass criteria as URL query string
-        // ═══════════════════════════════════════════════════════════════
+        // HERO SEARCH — pass criteria as URL query string
         document.getElementById('searchBtn').addEventListener('click', () => {
             const p = new URLSearchParams({
                 intent: document.getElementById('intentF').value,

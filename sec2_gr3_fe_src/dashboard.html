@@ -10,9 +10,7 @@
     <link rel="stylesheet" href="common-admin-sidebar.css" />
 
     <style>
-        /* ============================================================
-           MAIN CONTENT
-           ============================================================ */
+        /* MAIN CONTENT */
         .main {
             margin-left: 240px;
             padding: 80px 32px 60px;
@@ -28,9 +26,7 @@
             letter-spacing: 2px;
         }
 
-        /* ============================================================
-           STATS CARDS
-           ============================================================ */
+        /* STATS CARDS */
         .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -60,9 +56,7 @@
             color: #111;
         }
 
-        /* ============================================================
-           PROFILE DROPDOWN (top-right)
-           ============================================================ */
+        /* PROFILE DROPDOWN (top-right) */
         .profile-menu { position: relative; }
 
         .profile-trigger {
@@ -162,9 +156,7 @@
             margin-top: 2px;
         }
 
-        /* ============================================================
-           SEARCH ROW — Add New House button is now to the RIGHT of search
-           ============================================================ */
+        /* SEARCH ROW — Add New House button is now to the RIGHT of search */
         .search-row {
             display: flex;
             gap: 12px;
@@ -219,9 +211,7 @@
 
         .add-btn:hover { background: var(--blood-light); }
 
-        /* ============================================================
-           DATA TABLE
-           ============================================================ */
+        /* DATA TABLE */
         .table-wrap {
             background: #fff;
             border-radius: 10px;
@@ -296,9 +286,7 @@
 
         .btn-view:hover, .btn-edit:hover, .btn-delete:hover { opacity: .82; }
 
-        /* ============================================================
-           MODALS
-           ============================================================ */
+        /* MODALS */
         .overlay {
             display: none;
             position: fixed;
@@ -402,9 +390,7 @@
         .del-center { text-align: center; }
         .del-center p { color: #555; margin: 8px 0 24px; font-size: 15px; }
 
-        /* ============================================================
-           TOAST
-           ============================================================ */
+        /* TOAST */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -428,9 +414,7 @@
 </head>
 <body>
 
-    <!-- ========================================================
-         AUTH GUARD — runs immediately before page renders
-         ======================================================== -->
+    <!-- AUTH GUARD — runs immediately before page renders -->
     <script src="script.js"></script>
     <script>
         
@@ -441,9 +425,7 @@
         if (!isAdmin()) location.href = 'admin-login.html';
     </script>
 
-    <!-- ========================================================
-         SIDEBAR — Dashboard tab REMOVED, Product Management is default
-         ======================================================== -->
+    <!-- SIDEBAR — Dashboard tab REMOVED, Product Management is default -->
     <aside class="sidebar">
         <div class="sidebar-brand" onclick="location.href='homepage.html'">Long Gone</div>
         <nav class="sidebar-nav">
@@ -476,9 +458,7 @@
         </div>
     </header>
 
-    <!-- ========================================================
-         MAIN CONTENT
-         ======================================================== -->
+    <!-- MAIN CONTENT -->
     <main class="main">
 
         <div class="page-header">
@@ -515,9 +495,7 @@
         </section>
     </main>
 
-    <!-- ========================================================
-         ADD-HOUSE MODAL
-         ======================================================== -->
+    <!-- ADD-HOUSE MODAL -->
     <div class="overlay" id="addModal">
         <div class="modal">
             <h2>Add New House</h2>
@@ -539,9 +517,7 @@
         </div>
     </div>
 
-    <!-- ========================================================
-         DELETE MODAL
-         ======================================================== -->
+    <!-- DELETE MODAL -->
     <div class="overlay" id="deleteModal">
         <div class="modal">
             <div class="del-center">
@@ -555,15 +531,11 @@
         </div>
     </div>
 
-    <!-- ========================================================
-         SHARED DATA STORE + PAGE LOGIC
-         ======================================================== -->
+    <!-- SHARED DATA STORE + PAGE LOGIC -->
     <script>
         
 
-        // ═══════════════════════════════════════════════════════════════
-        //  PROFILE / TOPBAR — fill avatars + dropdown
-        // ═══════════════════════════════════════════════════════════════
+        // PROFILE / TOPBAR — fill avatars + dropdown
         const adminUser = getAdminUser();
         document.getElementById('profileInitial').textContent = adminUser.charAt(0).toUpperCase();
         document.getElementById('dropdownUser').textContent = adminUser;
@@ -583,9 +555,7 @@
             }
         });
 
-        // ═══════════════════════════════════════════════════════════════
-        //  HOUSE DATA + RENDER
-        // ═══════════════════════════════════════════════════════════════
+        // HOUSE DATA + RENDER
         var HOUSES = LG.getAll();
 
         function renderStats() {
@@ -628,9 +598,7 @@
         renderStats();
         renderTable(HOUSES);
 
-        // ═══════════════════════════════════════════════════════════════
-        //  SEARCH
-        // ═══════════════════════════════════════════════════════════════
+        // SEARCH
         document.getElementById('searchBtn').addEventListener('click', function () {
             var q = document.getElementById('searchInput').value.toLowerCase().trim();
             renderTable(q
@@ -643,9 +611,7 @@
             if (e.key === 'Enter') document.getElementById('searchBtn').click();
         });
 
-        // ═══════════════════════════════════════════════════════════════
-        //  ADD MODAL
-        // ═══════════════════════════════════════════════════════════════
+        // ADD MODAL
         document.getElementById('addBtn').addEventListener('click', function () {
             document.getElementById('addModal').classList.add('show');
         });
@@ -686,9 +652,7 @@
             showToast('House "' + name + '" added successfully!');
         });
 
-        // ═══════════════════════════════════════════════════════════════
-        //  DELETE MODAL
-        // ═══════════════════════════════════════════════════════════════
+        // DELETE MODAL
         var delId = null;
 
         function openDel(id, name) {
@@ -717,9 +681,7 @@
             });
         });
 
-        // ═══════════════════════════════════════════════════════════════
-        //  TOAST
-        // ═══════════════════════════════════════════════════════════════
+        // TOAST
         
 
         // Show success toast on URL redirect

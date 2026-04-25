@@ -1,6 +1,4 @@
-// ═══════════════════════════════════════════════════════════════
-//  LONG GONE — SHARED DATA STORE  (localStorage persistence)
-// ═══════════════════════════════════════════════════════════════
+// LONG GONE — SHARED DATA STORE  (localStorage persistence)
 var LG = (function () {
     var KEY = 'lgHouses';
 
@@ -78,9 +76,7 @@ var LG = (function () {
     return { getAll: getAll, getById: getById, update: update, add: add, remove: remove, reset: reset };
 })();
 
-// ═══════════════════════════════════════════════════════════════
-//  ADMIN AUTH HELPERS
-// ═══════════════════════════════════════════════════════════════
+// ADMIN AUTH HELPERS
 function isAdmin() {
     if (localStorage.getItem('lgAdmin') === 'true') {
         sessionStorage.setItem('lgAdmin', 'true');
@@ -101,9 +97,7 @@ function doLogout() {
     location.href = 'admin-login.html';
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  COMMON UI UTILITIES
-// ═══════════════════════════════════════════════════════════════
+// COMMON UI UTILITIES
 function showToast(msg, color) {
     var existing = document.querySelector('.toast');
     if (existing) existing.remove();

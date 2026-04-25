@@ -1,8 +1,3 @@
-/* ============================================================
-   COMMON STYLES FOR PUBLIC PAGES WITH NAVIGATION
-   Used by: homepage, buy, rent, house-detail, search-result, team
-   ============================================================ */
-
 *,
 *::before,
 *::after {
@@ -39,9 +34,7 @@ body {
     min-height: 100vh;
 }
 
-/* ============================================================
-   NAVIGATION BAR
-   ============================================================ */
+/* NAVIGATION BAR */
 nav {
     background: var(--dark);
     position: sticky;

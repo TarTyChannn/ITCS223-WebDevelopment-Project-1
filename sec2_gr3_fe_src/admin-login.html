@@ -9,9 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
 
     <style>
-        /* ============================================================
-           GLOBAL RESET + ROOT VARIABLES
-           ============================================================ */
+        /* GLOBAL RESET + ROOT VARIABLES */
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
@@ -25,9 +23,7 @@
             --font-body: 'Crimson Text', serif;
         }
 
-        /* ============================================================
-           BACKGROUND — haunted house image with dark overlay
-           ============================================================ */
+        /* BACKGROUND — haunted house image with dark overlay */
         body {
             font-family: var(--font-body);
             min-height: 100vh;
@@ -49,9 +45,7 @@
             z-index: 0;
         }
 
-        /* ============================================================
-           LOGIN CARD
-           ============================================================ */
+        /* LOGIN CARD */
         .card {
             position: relative;
             z-index: 1;
@@ -110,9 +104,7 @@
             margin-bottom: 44px;
         }
 
-        /* ============================================================
-           FORM ROWS
-           ============================================================ */
+        /* FORM ROWS */
         .form-row {
             display: flex;
             align-items: center;
@@ -209,9 +201,7 @@
 
         .forgot:hover { color: #ddd; }
 
-        /* ============================================================
-           SIGN-IN BUTTON
-           ============================================================ */
+        /* SIGN-IN BUTTON */
         .signin-btn {
             display: block;
             width: 100%;
@@ -260,9 +250,7 @@
         .hint-box p { color: #888; font-size: 13px; font-style: italic; }
         .hint-box strong { color: #aaa; }
 
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
+        /* RESPONSIVE */
         @media (max-width: 600px) {
             .card { padding: 40px 24px; }
             .form-row {
@@ -278,9 +266,7 @@
 </head>
 <body>
 
-    <!-- ========================================================
-         LOGIN CARD
-         ======================================================== -->
+    <!-- LOGIN CARD -->
     <main class="card">
 
         <!-- Brighter, more visible "Back to Home" link -->
@@ -322,9 +308,9 @@
     </main>
 
     <script>
-        // ═══════════════════════════════════════════════════════════════
+
         //  ADMIN CREDENTIALS (demo only — would be DB-backed in real app)
-        // ═══════════════════════════════════════════════════════════════
+        
         const ADMIN_USER = 'Ryu';
         const ADMIN_PASS = '555';
 
