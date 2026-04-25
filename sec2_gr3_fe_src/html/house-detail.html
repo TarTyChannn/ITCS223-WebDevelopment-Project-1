@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>House Detail — Long Gone</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="common-public-nav.css"/>
+<link rel="stylesheet" href="/html/common-public-nav.css"/>
 <style>
     .container {
         max-width:1200px;
@@ -420,11 +420,11 @@
 <body>
 <nav>
   <div class="nav-links">
-    <a href="buy.html">Buy</a>
-    <a href="rent.html">Rent</a>
-    <a href="team.html">Our Team</a>
+    <a href="/buy">Buy</a>
+    <a href="/rent">Rent</a>
+    <a href="/team">Our Team</a>
   </div>
-  <a class="nav-brand" href="homepage.html">Long Gone</a>
+  <a class="nav-brand" href="/">Long Gone</a>
   <div><button class="admin-btn" id="adminBtn">&#128274; Admin</button></div>
 </nav>
 <div class="container">
@@ -553,7 +553,7 @@ if (isAdmin()) {
     bar.classList.add('show');
     const user = sessionStorage.getItem('lgAdminUser') || localStorage.getItem('lgAdminUser') || 'Admin';
     document.getElementById('adminBarUser').textContent = user;
-    document.getElementById('editThisBtn').onclick = () => location.href = 'edit-house.html?id=' + H.id;
+    document.getElementById('editThisBtn').onclick = () => location.href = '/admin/edit?id=' + H.id;
     // Add padding to body so content isn't hidden behind bar
     document.body.style.paddingBottom = '60px';
 }
@@ -568,7 +568,7 @@ document.getElementById('submitViewing').addEventListener('click', () => {
         return;
     }
     document.getElementById('viewModal').classList.remove('show');
-    location.href = 'success.html?from=detail&id=' + H.id + '&msg=' + encodeURIComponent('Your viewing request for "' + H.name + '" has been submitted!');
+    location.href = '/success?from=detail&id=' + H.id + '&msg=' + encodeURIComponent('Your viewing request for "' + H.name + '" has been submitted!');
 });
 document.getElementById('viewModal').addEventListener('click', function(e) {
     if (e.target === this) this.classList.remove('show');

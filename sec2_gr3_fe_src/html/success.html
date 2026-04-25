@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Success — Long Gone</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="common-form-modal.css"/>
+<link rel="stylesheet" href="/html/common-form-modal.css"/>
 <style>
 
     .card {
@@ -113,15 +113,15 @@ if (msg) document.getElementById('msgText').textContent = decodeURIComponent(msg
 var btn = document.getElementById('returnBtn');
 if (from === 'dashboard' || from === 'add') {
     btn.onclick = function() {
-        location.href = 'dashboard.html';
+        location.href = '/admin/dashboard';
     };
 } else if (from === 'edit') {
     btn.onclick = function() {
-        location.href = 'edit-house.html?id=' + id;
+        location.href = '/admin/edit?id=' + id;
     };
 } else if (from === 'detail') {
     btn.onclick = function() {
-        location.href = 'house-detail.html?id=' + id;
+        location.href = '/house?id=' + id;
     };
 } else {
     btn.onclick = function() {

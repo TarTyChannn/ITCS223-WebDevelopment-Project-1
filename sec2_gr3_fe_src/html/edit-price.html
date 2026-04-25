@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>edit-price — Long Gone Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="common-form-modal.css"/>
+<link rel="stylesheet" href="/html/common-form-modal.css"/>
 </head>
 <body>
 <script src="script.js"></script>
@@ -14,7 +14,7 @@
 
 
 if (!isAdmin()) {
-    location.href = 'admin-login.html';
+    location.href = '/admin/login';
 }
         </script>
 
@@ -40,7 +40,7 @@ document.getElementById('saveBtn').addEventListener('click', () => {
         return;
     }
     const formatted = parseInt(v).toLocaleString();
-    location.href = 'success.html?from=edit&id=' + hid + '&success=' + encodeURIComponent('Price updated to ' + formatted + ' THB!');
+    location.href = '/success?from=edit&id=' + hid + '&success=' + encodeURIComponent('Price updated to ' + formatted + ' THB!');
 });
         </script>
 </body>

@@ -7,7 +7,7 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="common-admin-sidebar.css" />
+    <link rel="stylesheet" href="/html/common-admin-sidebar.css" />
 
     <style>
         /* MAIN CONTENT */
@@ -415,22 +415,22 @@
 <body>
 
     <!-- AUTH GUARD — runs immediately before page renders -->
-    <script src="script.js"></script>
+    <script src="/script.js"></script>
     <script>
         
 
         
         
 
-        if (!isAdmin()) location.href = 'admin-login.html';
+        if (!isAdmin()) location.href = '/admin/login';
     </script>
 
     <!-- SIDEBAR — Dashboard tab REMOVED, Product Management is default -->
     <aside class="sidebar">
-        <div class="sidebar-brand" onclick="location.href='homepage.html'">Long Gone</div>
+        <div class="sidebar-brand" onclick="location.href='/'">Long Gone</div>
         <nav class="sidebar-nav">
             <!-- Only Product Management tab now, set as active by default -->
-            <a href="dashboard.html" class="active">Product Management</a>
+            <a href="/admin/dashboard" class="active">Product Management</a>
         </nav>
     </aside>
 
@@ -586,8 +586,8 @@
                     '<td style="color:#666">' + h.location + '</td>' +
                     '<td style="color:#888">' + h.updated + '</td>' +
                     '<td><div class="action-btns">' +
-                        '<button class="btn-view" onclick="location.href=\'house-detail.html?id=' + h.id + '\'">View</button>' +
-                        '<button class="btn-edit" onclick="location.href=\'edit-house.html?id=' + h.id + '\'">Edit</button>' +
+                        '<button class="btn-view" onclick="location.href=\'/house?id=' + h.id + '\'">View</button>' +
+                        '<button class="btn-edit" onclick="location.href=\'/admin/edit?id=' + h.id + '\'">Edit</button>' +
                         '<button class="btn-delete" onclick="openDel(' + h.id + ',\'' + h.name.replace(/'/g, "\\'") + '\')">Delete</button>' +
                     '</div></td>';
                 tb.appendChild(tr);

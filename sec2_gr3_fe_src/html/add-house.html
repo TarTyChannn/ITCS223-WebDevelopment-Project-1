@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>add-house — Long Gone Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="common-form-modal.css"/>
+<link rel="stylesheet" href="/html/common-form-modal.css"/>
 <style>
 
     .upload-area {
@@ -68,7 +68,7 @@
 
 
 if (!isAdmin()) {
-    location.href = 'admin-login.html';
+    location.href = '/admin/login';
 }
         </script>
 
@@ -83,7 +83,7 @@ if (!isAdmin()) {
   </div>
   <div class="field"><label>Description</label><textarea id="hDesc" placeholder="Describe the haunted property..."></textarea></div>
   <div class="actions">
-    <button class="btn-cancel" onclick="location.href='dashboard.html'">Cancel</button>
+    <button class="btn-cancel" onclick="location.href='/admin/dashboard'">Cancel</button>
     <button class="btn-confirm" id="confirmAdd">Confirm</button>
   </div>
 </div>
@@ -95,7 +95,7 @@ document.getElementById('confirmAdd').addEventListener('click', () => {
         alert('Please enter House Name and House ID.');
         return;
     }
-    location.href = 'success.html?from=dashboard&success=' + encodeURIComponent('House "' + name + '" added successfully!');
+    location.href = '/success?from=dashboard&success=' + encodeURIComponent('House "' + name + '" added successfully!');
 });
         </script>
 </body>

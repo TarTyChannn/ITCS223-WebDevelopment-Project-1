@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Search Results — Long Gone</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="common-public-nav.css"/>
+<link rel="stylesheet" href="/html/common-public-nav.css"/>
 <style>
     .page-wrap {
         flex:1;
@@ -163,8 +163,8 @@
 </head>
 <body>
 <nav>
-  <div class="nav-links"><a href="buy.html">Buy</a><a href="rent.html">Rent</a><a href="team.html">Our Team</a></div>
-  <a class="nav-brand" href="homepage.html">Long Gone</a>
+  <div class="nav-links"><a href="/buy">Buy</a><a href="/rent">Rent</a><a href="/team">Our Team</a></div>
+  <a class="nav-brand" href="/">Long Gone</a>
   <div><button class="admin-btn" id="adminBtn">&#128274; Admin</button></div>
 </nav>
 <div class="page-wrap">
@@ -265,7 +265,7 @@ var results = HOUSES.filter(function(h) {
 });
 var content = document.getElementById('resultContent');
 if (!results.length) {
-    content.innerHTML = '<div class="no-match">No haunted houses found.<br><br><a href="homepage.html" style="color:#8b0000">&#8592; Back to Home</a></div>';
+    content.innerHTML = '<div class="no-match">No haunted houses found.<br><br><a href="/" style="color:#8b0000">&#8592; Back to Home</a></div>';
 } else {
     var h = results[0];
     var adminEditBtn = isAdmin() ? '<button class="btn-edit" id="editBtn" style="display:inline-block" onclick="location.href=\'edit-house.html?id=' + h.id + '\'">Edit</button>' : '';

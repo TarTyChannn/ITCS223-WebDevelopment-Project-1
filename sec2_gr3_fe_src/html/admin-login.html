@@ -270,7 +270,7 @@
     <main class="card">
 
         <!-- Brighter, more visible "Back to Home" link -->
-        <a class="back-link" href="homepage.html">&#8592; Back to Home Page</a>
+        <a class="back-link" href="/">&#8592; Back to Home Page</a>
 
         <h1>Welcome to<br />Admin Dashboard</h1>
         <p class="subtitle">Restricted access — authorized personnel only</p>
@@ -345,7 +345,7 @@
                     localStorage.setItem('lgAdminUser', u);
                 }
                 err.style.display = 'none';
-                location.href = 'dashboard.html';
+                location.href = '/admin/dashboard';
             } else {
                 err.style.display = 'block';
                 err.textContent = 'Invalid username or password. Please try again.';
@@ -369,7 +369,7 @@
         // If already logged in, skip login screen
         if (sessionStorage.getItem('lgAdmin') === 'true' || localStorage.getItem('lgAdmin') === 'true') {
             sessionStorage.setItem('lgAdmin', 'true');
-            location.href = 'dashboard.html';
+            location.href = '/admin/dashboard';
         }
     </script>
 </body>

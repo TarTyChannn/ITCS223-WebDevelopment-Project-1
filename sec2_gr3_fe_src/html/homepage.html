@@ -7,7 +7,7 @@
 
     <!-- Google Fonts: Cinzel (display) + Crimson Text (body) -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="common-public-nav.css" />
+    <link rel="stylesheet" href="/html/common-public-nav.css" />
 
     <style>
         .hero {
@@ -353,11 +353,11 @@
     <header>
         <nav>
             <div class="nav-links">
-                <a href="buy.html">Buy</a>
-                <a href="rent.html">Rent</a>
-                <a href="team.html">Our Team</a>
+                <a href="/buy">Buy</a>
+                <a href="/rent">Rent</a>
+                <a href="/team">Our Team</a>
             </div>
-            <a class="nav-brand" href="homepage.html">Long Gone</a>
+            <a class="nav-brand" href="/">Long Gone</a>
             <div class="nav-right">
                 <span id="adminIndicator">&#128274; Admin</span>
                 <button class="admin-btn" id="adminBtn">&#128274; Admin</button>
@@ -523,7 +523,7 @@
                         '<div class="feature-area">' + h.area + '</div>' +
                         '<div class="feature-price">' + h.price + ' THB</div>' +
                     '</div>';
-                card.addEventListener('click', () => location.href = 'house-detail.html?id=' + h.id);
+                card.addEventListener('click', () => location.href = '/house?id=' + h.id);
                 slide.appendChild(card);
             });
             track.appendChild(slide);
@@ -565,7 +565,7 @@
                 rating: document.getElementById('rateF').value,
                 location: document.getElementById('locF').value.trim()
             });
-            location.href = 'search-result.html?' + p;
+            location.href = '/search?' + p;
         });
 
         // Allow Enter key to trigger search

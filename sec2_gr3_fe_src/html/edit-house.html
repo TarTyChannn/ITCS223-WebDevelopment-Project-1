@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Edit House — Long Gone Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="common-admin-sidebar.css"/>
+<link rel="stylesheet" href="/html/common-admin-sidebar.css"/>
 <style>
     :root {
         --gold:#c8941a;
@@ -369,7 +369,7 @@
 </head>
 <body>
 
-<script src="script.js"></script>
+<script src="/script.js"></script>
     <script>
 
 
@@ -378,21 +378,21 @@
 
 
 if (!isAdmin()) {
-    location.href = 'admin-login.html';
+    location.href = '/admin/login';
 }
         </script>
 
 <aside class="sidebar">
-  <div class="sidebar-brand" onclick="location.href='dashboard.html'">Long Gone</div>
+  <div class="sidebar-brand" onclick="location.href='/admin/dashboard'">Long Gone</div>
   <nav class="sidebar-nav">
-    <a href="dashboard.html">Dashboard</a>
-    <a href="dashboard.html" class="active">Product Management</a>
+    <a href="/admin/dashboard">Dashboard</a>
+    <a href="/admin/dashboard" class="active">Product Management</a>
   </nav>
 </aside>
 
 <div class="topbar">
   <div class="topbar-left">
-    <button class="return-btn" onclick="location.href='dashboard.html'">&#8592; Return</button>
+    <button class="return-btn" onclick="location.href='/admin/dashboard'">&#8592; Return</button>
     <span class="topbar-title">House Editing</span>
   </div>
   <div class="top-av" id="topAv">A</div>
