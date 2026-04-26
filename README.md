@@ -77,8 +77,8 @@ The submission covers:
 ### Step 1 — Clone the repository
 
 ```bash
-git clone <repository-url>
-cd <repository-folder>
+git clone https://github.com/TarTyChannn/ITCS223-WebDevelopment-Project-1.git
+cd ITCS223-WebDevelopment-Project-1
 ```
 
 ---
