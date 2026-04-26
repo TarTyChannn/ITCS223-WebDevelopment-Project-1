@@ -75,7 +75,7 @@ The submission covers:
 ## 🚀 Installation & Setup (Step-by-Step)
 
 ### Step 1 — Clone the repository
-
+Open Vscode click **File** ---> **Open Folder** to select where you want this project to be locate at. Then crate termial by click **...** --> **Terminal** --> **New Terminal** or type **Ctrl + Shift + `**. On the terminal panel right hand side you will see **+⌄** click **⌄** --> **Command Prompt** then typing the command below on the Command Prompt terminal.
 ```bash
 git clone https://github.com/TarTyChannn/ITCS223-WebDevelopment-Project-1.git
 cd ITCS223-WebDevelopment-Project-1
